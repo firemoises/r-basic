@@ -1,0 +1,36 @@
+---
+title: "Chunks"
+author: "Moises"
+date: "9/2/2020"
+output: html_document
+---
+
+### Mis primeras chunks
+
+Vamos a calcular $\sqrt{2} - e^{-2}$
+```{r nombre_chunk1}
+sqrt(2) - exp(-2)
+```
+
+Ejemplo de chunk que no muestra el codigo sino solo el resultado debido al hacer echo = FALSE
+```{r nombre_chunk2, echo = FALSE}
+2 + 2
+```
+
+Ejemplo de chunk que no muestra el RESULTADO sino solo el codigo debido al hacer eval = FALSE
+```{r nombre_chunk3, eval = FALSE}
+2 + 2
+```
+
+
+Ejemplo de chunk que no muestra un warning
+```{r nombre_chunk4, message = FALSE}
+library(magic)
+magic(6)
+```
+
+Ejemplo de chunk que no muestra un warning ni hashtags ni nada raro
+```{r nombre_chunk5, message = FALSE, comment=NA}
+library(magic)
+magic(6)
+```

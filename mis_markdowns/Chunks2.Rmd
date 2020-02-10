@@ -1,0 +1,37 @@
+---
+title: "Chunks2"
+author: "Moises"
+date: "9/2/2020"
+output: html_document
+---
+
+Ejemplo de chunk que evalua la funcion y guarda en "x" pero no muestra el resultado ('Hide' debe estar en comillas)
+```{r nombre_chunk1, eval = TRUE, results = 'hide'}
+x = sqrt(2) - exp(-2)
+```
+
+Ejemplo de markup, Valor por defecto. Nos muestra los resultados en el documento final línea a línea, encabezados por ##
+```{r nombre_chunk2, eval = TRUE, results = 'markup'}
+x = sqrt(2) - exp(-2)
+y = sqrt(3) - exp(-3)
+
+```
+
+Ejemplo de asis, Nos devuelve los resultados línea a línea de manera literal en el documento final y el programa con el que se abre el documento final los interpreta como texto y formatea adecuadamente
+```{r nombre_chunk3, eval = TRUE, results = 'asis'}
+x = sqrt(2) - exp(-2)
+
+y = sqrt(3) - exp(-3)
+```
+
+Ejemplo de hold, SOLO Muestra todos los resultados al final del bloque de código (No linea a linea)
+```{r nombre_chunk4, eval = TRUE, results = 'hold'}
+x = sqrt(2) - exp(-2)
+
+y = sqrt(3) - exp(-3)
+
+print(x)
+```
+
+
+

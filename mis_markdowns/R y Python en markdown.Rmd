@@ -1,0 +1,32 @@
+---
+title: "R y Python"
+author: "Moises"
+date: "9/2/2020"
+output:
+  html_document:
+    df_print: paged
+---
+## Reticulate
+```{r}
+library(reticulate)
+use_python("/Users/moise/Anaconda3/share/jupyter/kernels/python3")
+#Esta libreria permite utilizar todas las funciones de Python en R
+#Se recomienda luego de cargar reticulate usar use_python para indicarle donde esta el python que instalaste que es el que tiene todos los paquetes de anaconda
+#Si deseas instalarle un paquete extra, utiliza la funcion py_install("Nombre del paquete")
+#Solo se cargara esta libreria en este documento porque la cargue en este chunk
+#Esta libreria permite utilizar todas las funciones de Python en R
+os <- import("os") 
+#Estoy guardando esta libreria de python en esta variable 
+#y se puede invocar cualquiera de sus funciones utilizando la variable que cree "os"
+
+os$listdir(".") 
+#La funcion listdir enlista todos los ficheros que estan en el directorio donde ejecute esta funcion
+
+```
+
+```{r}
+math <- import("math") 
+math$sqrt(4) 
+#Aqui importe el package de math en python y llame a la funcion sqrt
+```
+

@@ -1,0 +1,103 @@
+---
+title: "Doc texto"
+author: "Moises"
+date: "9/2/2020"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+# Documentacion markdown
+
+# Encabezado 1
+## Encabezado 2
+### Encabezado 3
+#### Encabezado 4
+##### Encabezado 5
+###### Encabezado 6
+
+texto llano
+
+formato en r = `R`
+
+En latex = \LaTeX
+
+NOTA: Para que haya un nuevo parrafo debe haber 2 saltos de linea
+
+Para colocar cursiva = *Cursiva*
+
+Para colocar negrita = **negrita**
+
+Para colocar exponentes o superindices = al_cuadrado^2^
+
+Para tachar una pablara = ~~Math sucks~~
+
+Para poner un link = [udemy](https://www.udemy.com/)
+
+Para destacar algun ejemplo = --Por ejemplo
+
+Para agregar un guion = ---Este es un dialogo
+
+Esto indica la ausencia de un fragmento = ...
+
+Para las formulas en linea = $\pi\cdot r^2$
+
+Para una linea divisora = 
+
+***
+
+Para hacer una cita de bloque = 
+> Cita de bloque
+
+***
+
+Para crear listas desordenadas utiliza * asteriscos, - guiones, o + símbolo de suma = 
+- Elemento de lista 1
+
+- Elemento de lista 2
+
+* Elemento de lista 3
+
+* Elemento de lista 4
+
++ Elemento de lista 5
+
++ Elemento de lista 6
+
+***
+
+Para generar listas anidadas dentro de otras, simplemente tendrás que añadir **cuatro espacios en blanco antes del siguiente *, - o +.
+
+- Elemento de lista 1
+- Elemento de lista 2    
+    - Elemento de lista 3
+    - Elemento de lista 4    
+        - Elemento de lista 5
+        - Elemento de lista 6
+        
+***
+
+Para crear listas ordenadas debes utilizar la sintaxis de tipo: “número.” 1.. Al igual que ocurre con las listas desordenadas, también podrás anidarlas o combinarlas.
+
+1. Elemento de lista 1
+2. Elemento de lista 2
+    - Elemento de lista 3
+    - Elemento de lista 4
+3. Elemento de lista 5
+1. Elemento de lista 6
+
+***
+
+Para crear una tabla (Las lineas deben estar alineadas) =
+
+Alumno         |       Nota
+---------------|------------------
+Moises Diaz    |        3.4       
+Juan Perez     |        7.4       
+Domingo contrer|        1.4       
+
+***
+
+Para una imagen = ![](lp7.PNG)
+

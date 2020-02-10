@@ -1,11 +1,12 @@
 ---
-title: Tema 1 - Trabajando con R
-author: Juan Gabriel Gomila & María Santos
-output: 
+title: "Tema 1 - Trabajando con R"
+author: "Juan Gabriel Gomila & María Santos"
+output:
+  beamer_presentation: default
   ioslides_presentation:
-    widescreen: true
     css: JB_style.css
     logo: Imgs/LogoCurso.png
+    widescreen: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -318,3 +319,7 @@ Conj(z2)
 ![](Imgs/complex.png)
 
 </div>
+
+
+help(lm)
+

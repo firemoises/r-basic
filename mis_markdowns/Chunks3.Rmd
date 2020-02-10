@@ -1,0 +1,34 @@
+---
+title: "Chunks3"
+author: "Moises"
+date: "9/2/2020"
+output:
+  html_document:
+    df_print: paged
+---
+
+## Los chunks en modo línea
+
+Con lo explicado hasta ahora, solamente hemos generado resultados en la línea aparte
+
+Para introducir una parte de código dentro de un párrafo y que se ejecute al comilarse el documento mostrando así el resultado final, hay que hacerlo utilizando r
+
+Ejemplo: Cuando queremos hacer la raiz cuadrada de dos, podemos hacerlo:
+
+- En $\LaTeX$: $\sqrt{2}$
+- En r haciendo `r sqrt(2)`
+- O lo que es lo mismo: $\sqrt{2}$ `r sqrt(2)`
+
+
+## Ejemplo: Mis examenes
+
+```{r results='hide', echo=FALSE}
+notas = c(2,3,4,5,7,8,10)
+media_notas = mean(notas)
+media_notas = round(media_notas,2)
+cant_examenes = length(notas)
+desv.tip = sd(notas)
+desv.tip = round(desv.tip,2)
+```
+
+Este año hemos tenido `r cant_examenes` examenes y yo he obtenido un promedio de `r media_notas` de 10 con una desviacion tipica de `r desv.tip`
