@@ -1,0 +1,40 @@
+---
+title: "Intro vectores2"
+author: "Moises"
+date: "10/2/2020"
+output: pdf_document
+---
+
+## Haciendo funciones con los vectores
+```{r}
+x=1:10
+x+pi
+sqrt(x)
+#Puedo realizar cualquier operacion o funcion a cada uno de los elementos de un vector con tan solo realizar la operacion o la funcion con la variable del vector
+```
+
+
+
+## Haciendo funciones con los vectores 2
+```{r}
+x=1:10
+suma = function(a){a+5}
+sapply(x,FUN=suma)
+#No siempre funcionara la primera forma de hacer funciones con vectores, cuando esto suceda esta sapply()
+```
+
+## Las funciones nativas de los vectores
+Dado un vector de datos x podemos calcular muchas medidas estadísticas acerca del mismo:
+
+* length(x): calcula la longitud del vector x
+* max(x): calcula el máximo del vector x
+* min(x): calcula el mínimo del vector x
+* sum(x): calcula la suma de las entradas del vector x
+* prod(x): calcula el producto de las entradas del vector x
+* mean(x): calcula la media aritmética de las entradas del vector x
+* diff(x): calcula el vector formado por las diferencias sucesivas entre entradas del vector original x
+* cumsum(x): calcula el vector formado por las sumas acumuladas de las entradas del vector original x
+    * Permite definir sucesiones descritas mediante sumatorios
+    * Cada entrada de cumsum(x) es la suma de las entradas de x hasta su posición
+* sort(x): ordena el vector en orden natural de los objetos que lo forman: el orden numérico creciente, orden alfabético…
+* rev(x): invierte el orden de los elementos del vector x

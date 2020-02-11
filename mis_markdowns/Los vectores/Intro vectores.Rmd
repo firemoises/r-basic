@@ -1,0 +1,62 @@
+---
+title: "Los vectores en r"
+author: "Moises"
+date: "10/2/2020"
+output:
+  html_document:
+    df_print: paged
+---
+
+### Un vector es una secuencia ordenada de datos. R dispone de muchos tipos de datos, por ejemplo:
+
+##### En los vectores de R, todos sus objetos han de ser del mismo tipo y si no lo son, todos los elementos del vector adquiriran el tipo de dato segun la siguiente jerarquia
+* logical: lógicos (TRUE o FALSE)
+* integer: números enteros, Z
+* numeric: números reales, R
+* complex: números complejos, C
+* character: palabras
+
+Por ejemplo en c(1,2,3,4,"m") todas se convertiran a String porque el tipo de dato character es el que tiene mas jerarquia
+
+## Básico
+
+* c(): para definir un vector
+* scan(): para definir un vector a base de columnas
+* fix(x): para modificar visualmente el vector x
+* rep(a,n): para definir un vector constante que contiene el dato a
+repetido n veces
+
+
+#### NOTA: En la documentacion de scan puedes definir si quieres que el vector sea por ejemplo de algun tipo en especifico
+
+
+## Vectores con secuencias
+```{r}
+seq(4,24,2) 
+#El primer argumento es el inicio de la secuencia
+#El segundo argumento es el final de la secuencia
+#El tercer argumento se llama saltitos sera de cuanto en cuanto ira creciendo o decreciendo
+```
+
+## Vectores con secuencias 2
+```{r}
+seq(4,24,length.out=7) 
+#En este caso el tercer argumento es la cantidad de elementos que deseo tenga la secuencia
+```
+
+## Vectores con secuencias 3
+```{r}
+seq(4,length.out=10, by=5) 
+#En este caso estoy definiendo que quiero se divide en 7 elementos pero en saltos de 5 en 5 PERO no puedo defnir como terminara
+```
+
+## Vectores con secuencias 4
+```{r}
+1:40
+#Otra forma de hacer secuencias es solo con indicar el numero inicial y final separados por 2 puntos
+```
+## Vectores concatenados
+```{r}
+c(1:10, rep(5,10), seq(4,length.out=10, by=5))
+#c()Permite unir cualquier tipo de vectores
+```

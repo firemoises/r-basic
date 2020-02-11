@@ -1,0 +1,37 @@
+---
+title: "Binomio de newton"
+author: "Moises"
+date: "11/2/2020"
+output: html_document
+---
+# El producto notable
+
+la formula del producto notable es
+
+$$(a+b)^2 = a^2+2ab+b^2$$
+
+# Funcion con R
+
+```{r}
+producto_notable = function(a,b){
+a^2+(2*a*b)+b^2
+}
+
+producto_notable(1,2)
+```
+
+# El binomio de newton
+
+$$ P(A) = \sum P(\{ (e_1,...,e_N) \})  =  {{N}\choose{k}} \cdot p^kq^{N-k}$$
+
+# Funcion con R
+
+```{r}
+binomio_newton = function(a,b,n){
+cumsum(choose(n,(0:n))*a^{n-(0:n)}*b^(0:n))[n+1]
+}
+
+binomio_newton(2,1,2)
+```
+
+
