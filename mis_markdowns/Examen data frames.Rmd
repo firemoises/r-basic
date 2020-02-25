@@ -1,0 +1,81 @@
+---
+title: "Examen data frames"
+author: "Moises"
+date: "22/2/2020"
+output: html_document
+---
+
+```{r}
+df_ol = read.csv("http://winterolympicsmedals.com/medals.csv")
+
+```
+
+
+1. ¿Cuantos deportistas aparecen en el data frame?
+```{r}
+
+nrow(df_ol)
+
+```
+
+2. ¿Cuantos han ganado medallas de oro, cuantos de plata y cuantos de bronce?
+```{r}
+
+nrow(subset(df_ol, Medal == "Bronze")) #Cant Medallas de bronze
+
+nrow(subset(df_ol, Medal == "Silver")) #Cant Medallas de Plata
+
+nrow(subset(df_ol, Medal == "Gold")) #Cant Medallas de Oro
+
+```
+
+3. ¿En cuantos lugares se han hecho olimpiadas de invierno?
+```{r}
+
+length(levels(df_ol$City))
+
+```
+
+4. ¿Cuantos hombres y cuantas mujeres hay?
+```{r}
+
+nrow(subset(df_ol, Event.gender == "M")) #Cant de hombres
+
+nrow(subset(df_ol, Event.gender == "W")) #Cant de mujeres
+
+nrow(subset(df_ol, Event.gender == "X")) #Cant de de indefinidos
+
+```
+
+5. ¿En qué año participaron más deportistas?
+```{r}
+
+df_ol$Year = as.factor(df_ol$Year)
+max_freq = max(table(df_ol$Year))
+table(df_ol$Year)[table(df_ol$Year) == max_freq]
+
+```
+
+
+6. El campo NOC indica el país del ganador de la medalla. ¿Qué país puede presumir de haber ganado más medallas de oro en los juegos de invierno entre 1960 y 1996?
+```{r}
+
+df_ol = read.csv("http://winterolympicsmedals.com/medals.csv")
+df_ol = df_ol[df_ol$Year >= 1960 & df_ol$Year <= 1996,]
+df_ol$NOC = as.factor(df_ol$NOC)
+max_freq = max(table(df_ol$NOC))
+table(df_ol$NOC)[table(df_ol$NOC) == max_freq]
+
+```
+
+
+
+## Tabla detalle
+```{r}
+
+str(df_ol)
+
+df_ol
+
+```
+

@@ -1,0 +1,65 @@
+---
+title: "Mas sobre sub data frames"
+author: "Moises"
+date: "22/2/2020"
+output: html_document
+---
+
+## Más sobre sub-data frames
+- droplevels(d.f): para borrar los niveles sobrantes de todos los factores, ya que las columnas que son factores heredan en los sub-data frames todos los niveles del factor original, aunque no aparezcan en el trozo que hemos extraído
+
+```{r}
+
+Algebra = c(1,2,0,5)
+Analysis = c(3,3,2,7)
+Statistics = c(4,5,4,8)
+genero = c("H","H","M","H")
+grades = data.frame(Algebra = Algebra, Analysis = Analysis, Statistics = Statistics, genero = genero, stringsAsFactors = TRUE) 
+
+grades_h = grades[grades$genero == "H",]# Para guardar solo a los hombres
+str(grades_h) #Aqui veremos que este nuevo data frame heredo los levels del factor genero 
+
+grades_h = droplevels(grades_h) #Por lo que si queremos borrar los levels existentes, solo hay que hacer un droplevels
+str(grades_h) 
+
+
+
+```
+
+## Usando Select de Tidyverse
+- select(d.f, parámetros): para especificar que queremos extraer de un data frame
+    - starts_with("x"): extrae del data frame las variables cuyo nombre empieza con la palabra "x"
+    - ends_with("x"): extrae del data frame las variables cuyo nombre termina con la palabra "x"
+    - contains("x"): extrae del data frame las variables cuyo nombre contiene la palabra "x"
+    - Se necesita el paquete dplyr o mejor aún tidyverse
+```{r}
+library(tidyverse)
+
+df_iris = iris
+iris_petal = select(df_iris,starts_with("Petal")) #COn esto solo me trae las columnas que comienzan con la palabra petal
+head(iris_petal,10)
+
+iris_Length = select(df_iris,ends_with("Length")) #COn esto solo me trae las columnas que terminan con la palabra Length
+head(iris_Length,10)
+
+iris_Length2 = select(df_iris,contains("Length")) #COn esto solo me trae las columnas que contienen la palabra Length
+head(iris_Length2,10)
+```
+
+## Más sobre sub-data frames
+- subset(d.f,condición,select = columnas): para extraer del data frame las filas que cumplen la condición y las columnas especificadas
+    - Si queremos todas las filas, no hay que especificar ninguna condición
+    - Si queremos todas las columnas, no hace especificar el parámetro select
+    - Las variables en la condición se especifican con su nombre, sin añadir antes el nombre del data frame
+```{r}
+
+df_iris = iris
+versicolor = subset(df_iris, Species == "versicolor") #Aqui solo traigo las setosas
+head(versicolor,5)
+
+#Sin embargo el nuevo data frame heredo los names del data frame anterior por lo tanto debemos cambiarselos
+cant_filas_versicolor = nrow(versicolor) # Para traer el numero de filas del nuevo data frame
+row.names(versicolor) = c(1:cant_filas_versicolor) #Para nombrar los nuevos data frames segun el numero de filas
+head(versicolor,5)
+
+```

@@ -1,0 +1,25 @@
+---
+title: "El uso de table"
+author: "Moises"
+date: "23/2/2020"
+output: html_document
+---
+
+## El uso de table
+Esta funcion creara
+```{r}
+
+list = c(1:12,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,5,6,6,6) 
+table = table(list) #Con esto creara una tabla con cada uno de los datos del vector y su frecuencia o cuantas veces se repitio en dicho vector
+
+df = data.frame(valor_vector = table) #Podemos crear un dataframe de dicha tabla y creara una columna con los valores y otra columna con la frecuencia de cada valor
+df
+
+df[1,2] #Si desearamos obtener la frecuencia solo de la primera posicion bastaria con solo llamar al valor de la primera fila en la segunda columna 
+
+max_freq = max(df[,2])
+valor_max_freq = df$valor_vector.list[df$valor_vector.Freq== max_freq] #Si desearamos obtener el valor con mayor frecuencia en nuestro data frame
+
+```
+
+El numero con mayor frecuencia es el `r valor_max_freq` con una frecuencia de `r max_freq`

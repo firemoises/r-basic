@@ -1,0 +1,81 @@
+---
+title: "Construyendo dataframes"
+author: "Moises"
+date: "22/2/2020"
+output: html_document
+---
+## Construyendo data frames
+- data.frame(vector_1,...,vector_n): para construir un data frame a partir de vectores introducidos en el orden en el que queremos disponer las columnas de la tabla
+    - R considera del mismo tipo de datos todas las entradas de una columna de un data frame
+    - Las variables tomarán los nombres de los vectores. Estos nombres se pueden especificar en el argumento de data.frame entrando una construcción de la forma nombre_variable = vector
+    - rownames: para especificar los identificadores de las filas
+    - También en esta función podemos hacer uso del parámetro stringsAsFactors para evitar la transformación de las columnas de tipo palabra en factores
+```{r}
+Algebra = c(1,2,0,5,4,6,7,5,5,8)
+Analysis = c(3,3,2,7,9,5,6,8,5,6)
+Statistics = c(4,5,4,8,8,9,6,7,9,10)
+grades = data.frame(Alg = Algebra, An = Analysis, Stat = Statistics)
+str(grades)
+
+grades
+```
+
+## Parametros Construyendo data frames
+- fix(d.f): para crear / editar un data frame con el editor de datos
+- names(d.f): para cambiar los nombres de las variables
+- row.names(d.f): para modificar los identificadores de las filas. Han de ser todos diferentes
+- dimnames(d.f)=list(vec_nom_fil, vec_nom_col): para modificar el nombre de las filas y de las columnas simultáneamente
+```{r}
+Algebra = c(1,2,0,5)
+Analysis = c(3,3,2,7)
+Statistics = c(4,5,4,8)
+genero = c("H","H","M","H")
+grades = data.frame(Algebra = Algebra, Analysis = Analysis, Statistics = Statistics, genero = genero, stringsAsFactors = TRUE) # Con el parametro stringsAsFactors puedes convertir todos los strings en factores
+str(grades)
+
+names(grades)[1] = "math"
+names(grades)
+
+row.names(grades) = c("Pedro","Maria","Jose","Vane")
+rownames(grades)
+grades
+
+dimnames(grades) = list(
+c("Pe","Ma","Jo","Va"),
+c("AL","AN","ST","GN")
+)
+grades
+
+```
+
+## Construyendo data frames
+- d.f[núm_fila,] = c(...): para añadir una fila a un data frame
+    - Las filas que añadimos de esta manera son vectores, y por tanto sus entradas han de ser todas del mismo tipo
+    - Si no añadimos las filas inmediatamente siguientes a la última fila del data frame, los valores entre su última fila y las que añadimos quedarán no definidos y aparecerán como NA
+    - Para evitar el problema anterior, vale más usar la función rbind() para concatenar el data frame con la nueva fila
+```{r}
+
+grades[5,] = rbind(grades,c(4,2,8,"M")) # Se recomienda usar mejor rbind
+row.names(grades)[5] = c("Kiri")
+grades
+
+Calculus = c(5,4,6,2,4)
+grades = cbind(grades, Calculus) #Añadiendo una nueva columna
+grades
+
+```
+
+## Cambiando los tipos de datos
+- as.character: para transformar todos los datos de un objeto en palabras
+- as.integer: para transformar todos los datos de un objeto a números enteros
+- as.numeric: para transformar todos los datos de un objeto a números reales
+```{r}
+grades$GN = as.character(grades$GN) #Converti la columna genero, de factor a string
+grades
+
+grades$Naturales = c(5,4,6,2,4) #Otra forma de agregar otra colunmna
+grades
+```
+
+
+

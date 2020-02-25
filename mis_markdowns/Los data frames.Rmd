@@ -1,0 +1,113 @@
+---
+title: "Los data frames"
+author: "Moises"
+date: "21/2/2020"
+output: html_document
+---
+
+## Data frame de Iris
+```{r}
+
+df = iris # Se recomienda guardar los dataframes en variables, para asi no modificar los originales
+
+#Tambien se recomienda mucho que luego de definir el dataframe en una variable, lo llames en consola para que se guarde como variable en el "Global enviroment" y R pueda trabajar con dichos datos mas facilmente
+
+```
+
+## Obteniendo información del data frame
+- head(d.f,n): para mostrar las n
+primeras filas del data frame. Por defecto se muestran las 6 primeras filas
+- tail(d.f,n): para mostrar las n
+últimas filas del data frame. Por defecto semuestran las 6 últimas
+- str(d.f): para conocer la estructura global de un data frame
+- names(d.f): para producir un vector con los nombres de las columnas
+```{r}
+
+df = iris
+
+head(df,5)
+
+tail(df,5)
+
+str(df)
+
+names(df)
+
+```
+
+## Obteniendo MAS información del data frame
+- rownames(d.f): para producir un vector con los identificadores de las filas
+    - R entiende siempre que estos identificadores son palabras, aunque sean números, de ahí que los imprima entre comillas
+- colnames(d.f): para producir un vector con los identificadores de las columnas
+- dimnames(d.f): para producir una list formada por dos vectores (el de los identificadores de las filas y el de los nombres de las columnas)
+- nrow(d.f): para consultar el número de filas de un data frame
+- ncol(d.f): para consultar el número de columnas de un data frame
+- dim(d.f): para producir un vector con el número de filas y el de columnas
+
+```{r}
+
+df = iris 
+
+rownames(df)
+
+colnames(df)
+
+dimnames(df)
+
+nrow(df)
+
+ncol(df)
+
+dim(df)
+
+
+```
+
+## Obteniendo AUN MAS información del data frame
+- d.f$nombre_variable: para obtener una columna concreta de un dataframe
+    - El resultado será un vector o un factor, según cómo esté definida la columna dentro del data frame
+    - Las variables de un data frame son internas, no están definidas en el entorno global de trabajo de R
+```{r}
+
+df = iris
+
+df$Sepal.Length # Me va a traer todos los valores PERO solo de la columna Sepal.Length
+
+df$Species # Me va a traer las categorias de cada registro
+
+df$Sepal.Length[3] # Me va a traer SOLO el valor Sepal.Length que tenga la posicion 3
+
+df$Species[3] # Me va a traer SOLO la categoria que tenga la posicion 3
+
+
+```
+
+## Sub-data frames
+- d.f[n,m]: para extraer “trozos” del data frame por filas y columnas (funciona exactamente igual que en matrices) donde n y m pueden definirse como:
+    - intervalos
+    - condiciones
+    - números naturales
+    - no poner nada
+    - Si sólo queremos definir la subtabla quedándonos con algunas variables, basta aplicar el nombre del data frame al vector de variables
+    - Estas construcciones se pueden usar también para reordenar las filas o columnas
+```{r}
+
+df = iris
+
+df[1,2] # La fila 1 en la columna 2
+
+df[1:10,] #Las 10 primeras filas en todas las columnas
+
+df[1:10,1:2] #Las 10 primeras filas en las columnas 1 y 2
+
+df[df$Sepal.Length > 5.0 & df$Species == "setosa",] #Las filas que tengan un Sepal.Length mayor que 3.5 y sean de la especie setosa en todas las columnas
+
+df[df$Sepal.Length > 5.0 & df$Species == "setosa",c(2,5)] #Las filas que tengan un Sepal.Length mayor que 3.5 y sean de la especie setosa en las columnas 2 y 5
+
+df[df$Sepal.Length > 5.0 & df$Species == "setosa",][1:10,c(1,5)] #Las filas que tengan un Sepal.Length mayor que 3.5 y sean de la especie setosa en todas las columnas #PERO SOLO muestras 10 filas y SOLO las columnas 1 y 5
+
+df[1,2] = 1.1 #Modificando La fila 1 en la columna 2
+df[1,2]
+
+```
+

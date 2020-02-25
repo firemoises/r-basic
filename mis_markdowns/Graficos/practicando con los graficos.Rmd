@@ -1,0 +1,70 @@
+---
+title: "practicando con los graficos"
+author: "Moises"
+date: "16/2/2020"
+output: html_document
+---
+## Todas las formas de plot
+```{r fig.align='center'}
+
+plot(1,3) # forma 1
+
+plot(1:3,1:3) # forma 2
+
+plot(c(1,2,3),c(1,2,3)) #forma 3
+
+plot(c(1,2,3)) #forma 4
+
+f = function(x){x+4}
+n = c(1,2,3)
+plot(f(n),n) # forma 5
+plot(n,f(n)) # forma 5.5
+
+f = function(x){x+4}
+plot(f) # forma 6
+
+```
+
+Aprendizajes
+- Plot puede tomar un rango de varios xy a la vez pero debe usar "x1:x2,y1:y2" como en el ejemplo anterior
+- Plot tambien puede tomar varios valores arbitrarios en xy usando vectores ("c()")
+- en AMBOS casos anterior la cantidad de valores x debe ser igual a la cantidad de valores de x y de y
+- Plot permite tomar funciones ya que al final las funciones son para metros tambien
+- Si le das a plot una secuencia de cualquier tipo PERO solo UNA osea en vez de xy le das solo una x, la funcion plot procedera a agregar como y, ese solo valor que le diste y x sera una secuencia de 1 en 1 hasta cumplir con la secuenta que le diste
+- Ahora si quieres ver el grafico de una funcion SOLO debes usar el nombre de la funcion sin parentesis ni nada, eso simulara que x seguira una secuencia de 1,2,3,4, etc y Y sera la_funcinon(x) 
+
+
+## Todas las formas de curve
+```{r fig.align='center'}
+
+curve((x)) #forma 1
+
+curve(x^2) #forma 1.5
+
+curve(x+2,c(0:100)) #forma 2
+
+curve(x+2,0,100) #forma 2.5
+
+curve(x+2,c(1,2,3,4,5,6,7)) #forma 3
+
+f = function(x){x^2}
+curve(f(x),c(-2:2)) #forma 4
+
+
+```
+
+Aprendizajes
+- Curve solo funciona con funciones u operaciones en la abcisa x
+- Sino defines la funcion que habra en y, la funcion de x tomara su lugar como pasa en plot
+- Realmente curve no trabaja con coordinadas exactas sino que su objetivo es mostrar la forma en como se comporta una funcion en un grafico
+- Su nomenclatura siempresa sera (funcion,valores)
+
+
+## Graficos con escala logaritmica
+```{r}
+f = function(x){log(x+1)}
+I = c(1:15)
+plot(I,f(I))
+
+```
+

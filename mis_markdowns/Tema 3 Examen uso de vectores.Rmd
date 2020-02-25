@@ -1,0 +1,113 @@
+---
+title: 'Tarea 3: Estructuras de datos'
+author: "Moises"
+date: "12/2/2020"
+output: html_document
+---
+
+1. Cread un vector llamado "Harry" formado por la sucesión de números consecutivos entre el -10 y 27. Pedidle a R que os devuelva el elemento de índice 7. Escribid el resultado.
+```{r}
+
+harry = c(-10:27)
+harry[7]
+
+```
+
+2. Dad el máximo de la sucesión (100*2^n -7*3^n) con n=0,...,200
+```{r}
+
+n = c(0:200)
+max(100*2^n -7*3^n)
+
+```
+
+3. Cread la sucesión de números consecutivos entre 0 y 40. A continuación, cread el vector (3*5^n - 1) con n=0,...,40. Ponedle como nombre x. Ahora, dad el subvector de los elementos que son estrictamente mayores que 3.5
+```{r}
+
+n = c(0:40)
+x = (3*5^n - 1)
+x[x>3.5]
+```
+
+
+4. Cread una función que os devuelva la parte real, la imaginaria, el módulo, el argumento y el conjugado de un número, mostrando solo 2 cifras significativas
+
+RECOMENDACIÓN: En algún momento os hará falta utilizar vectores
+```{r}
+#Re, Im, Mod, Arg and Conj 
+funcion_detalles_op = function(x){
+parte_real = Re(x)
+parte_imaginaria = Im(x) 
+modulo = Mod(x) 
+argumento = Arg(x) 
+conjugado = Conj(x) 
+
+print("parte_real:")
+print(round(parte_real),2)
+
+print("parte_imaginaria:")
+print(round(parte_imaginaria),2)
+
+print("modulo:")
+print(signif(modulo),digits=3)
+
+print("argumento:")
+print(signif(argumento),digits =3)
+
+print("conjugado:")
+print(round(conjugado),2)
+
+}
+
+funcion_detalles_op(1+3i)
+```
+
+5. Cread una función que resuelva ecuaciones de segundo grado (de la forma Ax^2+Bx+C=0). No importa, por ahora, que tengáis en cuenta las que no tienen solución
+
+RECOMENDACIÓN: En algún momento os hará falta utilizar vectores
+```{r}
+
+funcion_resolver_ecu_segundo_grado = function(vector1,vector2,vector3){
+
+A=vector1
+x=vector2
+B=vector3
+
+vector_final = A*(x^2)+(B*x)
+
+vector_final
+}
+
+funcion_resolver_ecu_segundo_grado(0:100,0:100,0:100)
+```
+
+
+6. Tomando el vector vec = c(0,9,98,2,6,7,5,19,88,20,16,0), dad 3 opciones diferentes para calcular el subvector c(9,19,20,16)
+
+Tomando el vector vec definido en el apartado anterior, buscad
+
+    - qué entradas son pares
+
+    - qué entradas no son pares y mayores que 20
+
+    - dónde toma vec su valor máximo
+
+    - dónde toma vec sus valores mínimos
+```{r}
+vec = c(0,9,98,2,6,7,5,19,88,20,16,0)
+vec[vec>=9  &  vec<=20]
+vec[which(vec>=9  &  vec<=20)]
+vec[c(2,8,10,11)]
+
+vec[vec%%2==0]
+vec[vec%%2==1 &  vec>20]
+max(vec)
+min(vec)
+
+segundoGrado <- function(A, B, C) {
+  s1 <- (-B + sqrt(B^2 - 4 * A * C)) / 2 * A
+  s2 <- (-B - sqrt(B^2 - 4 * A * C)) / 2 * A
+  return(c(s1, s2))
+}
+segundoGrado(0:100,0:100,0:100)
+```

@@ -1,0 +1,145 @@
+---
+title: "Las matrices"
+author: "Moises"
+date: "11/2/2020"
+output: html_document
+---
+## matrix
+(vector, nrow=n, byrow=valor_lógico): para definir una matriz de n filas formada por las entradas del vector
+
+- nrow: número de filas
+- byrow: si se iguala a TRUE, la matriz se construye por filas; si se iguala a FALSE (valor por defecto), se construye por columnas. 
+- ncol: número de columnas (puede usarse en lugar de nrow)
+- R muestra las matrices indicando como [i,] la fila i-ésima y [,j] la columna j-ésima
+- Todas las entradas de una matriz han de ser del mismo tipo de datos
+
+```{r}
+m = matrix(1:12, nrow = 4)
+m
+
+m = matrix(1:12, nrow = 4, byrow = TRUE)
+m
+
+m = matrix(1:12, nrow = 3)
+m
+
+m = matrix(1:12, ncol = 2)
+m
+
+# Si generas una matriz con un numero de filas que no sea multiplo del total de registros, tirara un warning y los espacios faltantes se llenaran repitiendo la matriz
+m = matrix(1:12, nrow = 5) 
+m
+
+# Por lo que tambien puedes generar registros de un solo valor
+m = matrix(1, nrow = 5, ncol = 6) 
+m
+
+```
+
+## Construccion de matrices
+- rbind(vector1, vector2, ...): construye la matriz de filas vector1, vector2,…
+- cbind(vector1, vector2, ...): construye la matriz de columnas vector1, vector2,…
+    - Los vectores han de tener la misma longitud También sirve para añadir columnas (filas) a una matriz o concatenar por columnas (filas) matrices con el mismo número de filas (columnas)
+- diag(vector): para construir una matriz diagonal con un vector dado
+    - Si aplicamos diag a un número n, produce una matriz identidad de orden n
+```{r}
+m = matrix(1:12, nrow = 4)
+m = rbind(m,1:3,-1:-3) #rbind concatena filas de matrices de la MISMA longitud
+m
+
+m = cbind(m,1:6,-1:-6) #cbind concatena columnas de matrices de la MISMA longitud
+m
+
+m = diag(1:6) #para construir una matriz diagonal con un vector dado
+m
+
+```
+
+## Submatrices
+- matriz[i,j]: indica la entrada (i,j) de la matriz, siendo i,j∈N. Si i y j son vectores de índices, estaremos definiendo la submatriz con las filas pertenecientes al vector i y columnas pertenecientes al vector j
+- matriz[i,]: indica la fila i-ésima de la matriz, siendo i∈N
+- matriz[,j]: indica la columna j-ésima de la siendo j∈N
+    - Si i(j) es un vector de índices, estaremos definiendo la submatriz con las filas (columnas) pertenecientes al vector i (j)
+```{r}
+m = matrix(1:12, nrow = 4)
+m[2,1]
+m[2,] #Aqui me trae la segunda fila completa
+m[,3] #Aqui me trae la tercera columna completa
+```
+
+
+## Funciones
+- diag(matriz): para obtener la diagonal de la matriz
+- nrow(matriz): nos devuelve el número de filas de la matriz
+- ncol(matriz): nos devuelve el número de columnas de la matriz
+- dim(matriz): nos devuelve las dimensiones de la matriz
+- sum(matriz): obtenemos la suma de todas las entradas de la matriz
+- prod(matriz): obtenemos el producto de todas las entradas de la matriz
+- mean(matriz): obtenemos la media aritmética de todas las entradas de la matriz
+- colSums(matriz): obtenemos las sumas por columnas de la matriz
+- rowSums(matriz): obtenemos las sumas por filas de la matriz
+- colMeans(matriz): obtenemos las medias aritméticas por columnas de la matriz
+- rowMeans(matriz): obtenemos las medias aritméticas por filas de la matriz
+```{r}
+m = matrix(1:12, nrow = 4)
+diag(m)
+nrow(m)
+ncol(m)
+dim(m)
+sum(m)
+prod(m)
+mean(m)
+colSums(m)
+rowSums(m)
+colMeans(m)
+rowMeans(m)
+
+# Para aplicarle nuestras propias funciones a las matrices se debe usar apply()
+sumale_10 = function(x){x+10}
+apply(m, MARGIN = c(1,2), FUN=sumale_10)
+# IMPORTANTE, en el argumento MARGIN, el 1 es para aplicarlo por fila, el 2 es para hacerlo por columna y el c(1,2) es para hacerlo a toda la matriz
+
+```
+
+## Operaciones
+- t(matriz): para obtener la transpuesta de la matriz
+- +: para sumar matrices
+- *: para el producto de un escalar por una matriz
+- %*%: para multiplicar matrices
+- mtx.exp(matriz,n): para elevar la matriz a n
+    - Del paquete Biodem
+        - No calcula las potencias exactas, las aproxima
+- det(matriz): para calcular el determinante de la matriz
+- qr(matriz)$rank: para calcular el rango de la matriz
+- solve(matriz): para calcular la inversa de una matriz invertible
+    - También sirve para resolver sistemas de ecuaciones lineales. Para ello introducimos solve(matriz,b), donde b es el vector de términos independientes
+```{r}
+m = matrix(1:9, nrow = 3)
+m2 = matrix(10:18, nrow = 3)
+m3 = rbind(c(1,4,2),c(0,1,3),c(1,8,9))
+
+t(m)
+t(m2)
+m + m2
+m * m2 # Esto es el cuadrado de cada una de las posiciones no el producto
+m %*% t(m2) #Por alguna razon debes primero transponer alguna de las 2 marices
+#mtx.exp(m3,2) #Debes tener habilitado el paquete de biodem y debe ser una matriz cuadrada
+
+det(m) # La Matriz debe ser cuadrada
+qr(m3)
+solve(m3) #La matriz debe ser de rango 3
+```
+
+
+## Vector propio y valor propio
+- eigen(matriz): para calcular los valores (vaps) y vectores propios (veps)
+    - eigen(matriz)$values: nos da el vector con los vaps de la matriz en orden decreciente de su valor absoluto y repetidos tantas veces como su multiplicidad algebraica.
+    - eigen(matriz)$vectors: nos da una matriz cuyas columnas son los veps de la matriz.
+```{r}
+M = rbind(c(2,6,-8), c(0,6,-3), c(0,2,1))
+eigen(M)
+eigen(M)$values
+eigen(M)$vectors
+```
+
+

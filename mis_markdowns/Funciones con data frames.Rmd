@@ -1,0 +1,65 @@
+---
+title: "Funciones con data frames"
+author: "Moises"
+date: "22/2/2020"
+output: html_document
+---
+
+## Aplicando funciones a data frames
+- sapply(d.f, función): para aplicar una función a todas las columnas de un data frame en un solo paso
+    - na.rm=TRUE: para evitar que el valor que devuelva la función para las columnas que contengan algún NA sea NA
+- aggregate(variables~factors,data=d.f,FUN=función): para aplicar una función a variables de un data frame clasificadas por los niveles de un, o más de un, factor
+    - Si queremos aplicar la función a más de una variable, tenemos que agruparlas con un cbind
+    - Si queremos separar las variables mediante más de un factor, tenemos que agruparlos con signos +
+```{r}
+
+df_iris = iris[,c(1:4)] #Sin la columna que es un string
+
+sapply(df_iris,mean, na.rm=TRUE) #Para evitar problemas lo mejor es siempre usar na.rm=TRUE
+
+sapply(df_iris,sum, na.rm=TRUE)
+
+f = function(x){x+1}
+head(sapply(df_iris,f),5) #Por alguna razon na.rm=TRUE detiene el codigo cuando uso la funcion f que cree 
+
+df_iris = iris #Aqui vuelvo a definir el dataframe iris pero ahora con todas las columnas
+aggregate(Sepal.Length~Species,data=df_iris,FUN=mean, na.rm=TRUE) # COn esto me trae la media del Sepal.Length clasificado por los levels de un factor
+
+aggregate(cbind(Sepal.Length,Petal.Length)~Species,data=df_iris,FUN=mean, na.rm=TRUE) # Para obtener el mismo dato de mas de 1 columna se debe usar cbind
+
+
+mtcars_df = mtcars # Usando un nuevo data frame
+
+#Convirtiendo algunas columnas de numericas en factores
+mtcars_df$cyl = as.factor(mtcars_df$cyl)
+mtcars_df$gear = as.factor(mtcars_df$gear)
+
+#Nombrando los levels de los factores
+mtcars_df$cyl = factor(mtcars_df$cyl, levels = c(4,6,8), labels = c("Tipo1","Tipo2","Tipo3"))
+
+mtcars_df$gear = factor(mtcars_df$gear, levels = c(4,3), labels = c("Manual","Automatico"))
+
+#Para mostrar los valores separados por levels de mas de un factor
+aggregate(cbind(disp,hp,drat)~cyl+gear,data=mtcars_df,FUN=mean, na.rm=TRUE) # 
+
+
+```
+
+
+## Variables globales
+- attach(d.f): para hacer que R entienda sus variables como globales y que las podamos usar por su nombre, sin necesidad de añadir delante el nombre del data frame y el símbolo $
+    - Si ya hubiera existido una variable definida con el mismo nombre que una variable del data frame al que aplicamos attach, hubiéramos obtenido un mensaje de error al ejecutar esta función y no se hubiera reescrito la variable global original
+- detach(d.f): para devolver la situación original, eliminando del entorno global las variables del data frame
+
+```{r}
+
+df_iris = iris
+attach(df_iris) # Esta funcion procedera a convertir en variables de trabajo a todas las variables del data frame de iris, por lo que para consultar a los petalos no sera necesario hacer esto df_iris$Petal.Length
+
+Petal.Length #bastara con hacer esto PERO ten cuidado con hacerlo sobre variables ya existentes eso dara ERROR
+
+detach(df_iris) #Para deshacer lo realizado
+
+
+```
+
