@@ -1,0 +1,145 @@
+---
+title: "La funcion table"
+author: "Moises"
+date: "25/2/2020"
+output: html_document
+---
+Supongamos que tenemos una variable cualitativa guardada en un vector o un factor como la siguiente:
+
+```{r}
+
+x = sample(1:5, size = 12, replace = TRUE) #Esta funcion genera una cantidad x de numeros aleatorios segun el parametro size, de x a x numeros segun el primer parametro en este caso el del 1 al 5, Si el parametro replace es TRUE entonces cada vez que salga un numero del rango brindado(1:5) entonces este sera remplazado, es basicamente diciendole que puede repetir los numeros aleatorios
+x
+
+```
+
+```{r}
+
+Respuestas=factor(sample(c("Si", "No"), size = 12, replace = TRUE)) #En este caso es igual pero solo de dos valores (si y no) y se estan convirtiendo en factores
+Respuestas
+
+```
+
+Con R, la tabla de frecuencias absolutas de un vector que representa una variable cualitativa se calcula con la función table(). Tambien llamada tabla de contigencia
+
+```{r}
+
+table(x)
+
+```
+
+```{r}
+
+table(Respuestas)
+
+```
+
+Los nombres de las columnas de una tabla unidimensional se obtienen con la función names().
+```{r}
+names(table(x))
+
+names(table(Respuestas))
+```
+
+En la table de un vector sólo aparecen los nombres de los niveles presentes en el vector. Si el tipo de datos cualitativos usado tenía más niveles y queremos que aparezcan explícitamente en la tabla (con frecuencia 0), hay que transformar el vector en un factor con los niveles deseados.
+
+```{r}
+z=factor(x, levels=1:7) #Los niveles serán 1,2,3,4,5,6,7 
+z
+table(z)
+```
+
+Podemos pensar que una tabla unidimensional es como un vector de números donde cada entrada está identificada por un nombre: el de su columna. Para referirnos a una entrada de una tabla unidimensional, podemos usar tanto su posición como su nombre (entre comillas, aunque sea un número).
+
+```{r}
+table(x)[3] #La tercera columna de table(x)
+table(x)["7"] #¿La columna de table(x) con nombre 7?
+table(x)["5"] #La columna de table(x) con nombre 5
+3*table(x)[2] #El triple de la segunda columna de table(x)
+```
+
+Las tablas de contingencia aceptan la mayoría de las funciones que ya hemos utilizado para vectores.
+
+```{r}
+sum(table(x)) #Suma de las entradas de table(x)
+sqrt(table(Respuestas)) #Raíces cuadradas de las entradas de table(Respuestas)
+```
+
+La tabla de frecuencias relativas de un vector se puede calcular aplicando la función prop.table() a su table. El resultado vuelve a ser una tabla de contingencia unidimensional.
+
+```{r}
+prop.table(table(x)) #Esto saca la proporcion de una frecuncia absoluta, osea la frecuenta relativa
+
+prop.table(table(Respuestas))
+```
+
+¡CUIDADO! La función prop.table() se tiene que aplicar al resultado de table, no al vector original. Si aplicamos prop.table() a un vector de palabras o a un factor, dará un error, pero si la aplicamos a un vector de números, nos dará una tabla.
+
+Esta tabla no es la tabla de frecuencias relativas de la variable cualitativa representada por el vector, sino la tabla de frecuencias relativas de una variable que tuviera como tabla de frecuencias absolutas este vector de números, entendiendo que cada entrada del vector representa la frecuencia de un nivel diferente.
+
+```{r}
+prop.table(x) #ESTO no debe ser 
+
+X=c(1,1,1)
+prop.table(table(X)) #ESTO esta bien
+
+prop.table(X) #ESTO no debe ser
+```
+
+También podemos calcular la tabla de frecuencias relativas de un vector dividiendo el resultado de table por el número de observaciones.
+```{r}
+table(x)/length(x)
+```
+
+Dados un vector x y un número natural n, la instrucción
+
+names(which(table(x)==n))
+
+nos da los niveles que tienen frecuencia absoluta n
+en x.
+
+```{r}
+table(x)
+names(which(table(x)==1)) #Esto calcula cuales valores tuvieron frecuencia 1
+names(which(table(x)==5)) #Esto calcula cuales valores tuvieron frecuencia 5
+
+```
+
+En particular, por lo tanto,
+
+names(which(table(x)==max(table(x))))
+
+nos da los niveles de frecuencia máxima en x
+: su moda.
+```{r}
+names(which(table(x)==max(table(x)))) #Esto trae el valor que tuvo mayor frecuencia
+names(which(table(Respuestas)==max(table(Respuestas)))) #Esto trae el valor que tuvo mayor frecuencia
+
+moda = function(x){
+ names(which(table(x)==max(table(x))))  
+}
+
+moda(Respuestas) #Funcion para calcular la moda
+
+moda(x) #Funcion para calcular la moda
+
+```
+
+#### Ejercicio
+
+Recuperad el ejemplo de los 6 hombres y las 14 mujeres anterior y utilizando R, calculad su tabla de frecuencias absolutas, su tabla de frecuencias relativas y la moda.
+
+Pista: usad la función rep() para no tener que escribir los datos a mano.
+
+```{r}
+
+lista = c(rep("Mujer",14),rep("Hombre",6)) #Rep() repite los valores dados
+
+table(lista)
+prop.table(table(lista))
+names(which(table(lista)==max(table(lista))))
+
+moda(lista)
+
+```
+

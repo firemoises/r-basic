@@ -1,0 +1,77 @@
+---
+title: "Datos cuantitativos 3"
+author: "Moises"
+date: "4/3/2020"
+output: html_document
+---
+## Función summary()
+
+La función summary aplicada a un vector numérico o a una variable cuantitativa nos devuelve un resumen estadístico con los valores mínimo y máximo del vector, sus tres cuartiles y su media.
+
+Al aplicar esta función a un data frame, esta se aplica a todas sus variables de forma simultánea. De este modo, podemos observar rápidamente si hay diferencias notables entre sus variables numéricas.
+```{r}
+cangrejos = read.table("../data/datacrab.txt", header = TRUE) #Cargamos el data frame
+cangrejos = cangrejos[-1] #Eliminamos la primera columna
+summary(cangrejos) #Aplicamos la función summary
+```
+
+## Ejemplo 5
+Si nos interesase comparar numéricamente los pesos y las anchuras de los cangrejos con 3 colores con los que tienen 5 colores, utilizaríamos las siguientes instrucciones:
+```{r}
+summary(subset(cangrejos, color == 3,c("weight","width")))
+
+summary(subset(cangrejos, color == 5,c("weight","width")))
+```
+
+## La función by()
+
+La función by() se utiliza para aplicar una determinada función a algunas columnas de un data frame segmentándolas según los niveles de un factor.
+
+La sintaxis de esta función es by(columnas, factor, FUN = función).
+
+Con lo cual, haciendo uso de la función by y especificando FUN = summary, podremos calcular el resumen estadístico anteriormente comentado a subpoblaciones definidas por los niveles de un factor.
+
+## Ejemplo 6
+
+Para este ejemplo, haremos uso del famoso dataset iris.
+
+Si nos interesase calcular de forma rápida y sencilla las longitudes de sépalos y petalos en función de la especie, necesitaríamos hacer uso de la instrucción mostrada a continuación.
+
+Por motivos de espacio, no se muestran los resultados proporcionados por R.
+```{r}
+by(iris[,c(1,3)], iris$Species, FUN = summary)
+```
+
+## Función aggregate()
+
+Tanto la función by como la función aggregate son equivalentes. No obstante, los resultados se muestran de forma diferente en función de cual utilicemos.
+
+En el caso del ejemplo anterior, convenía más hacer uso de la función by.
+
+Podéis comprobarlo introduciendo por consola la siguiente instrucción:
+
+
+```{r}
+aggregate(cbind(Sepal.Length,Petal.Length)~Species, data=iris, FUN=summary)
+
+```
+
+## NA
+
+La mayoría de las funciones vistas a lo largo de este tema no funcionan bien con valores NA.
+
+Para no tenerlos en cuenta a la hora de aplicar estas funciones, hay que especificar el parámetro na.rm = TRUE en el argumento de la función.
+
+```{r}
+dados2 = sample(1:6,15, replace = TRUE)
+dadosNA = c(dados2,NA)
+dadosNA
+
+mean(dadosNA)
+
+mean(dadosNA, na.rm = TRUE)
+sd(dadosNA, na.rm = TRUE)
+sum(dadosNA, na.rm = TRUE)
+
+```
+

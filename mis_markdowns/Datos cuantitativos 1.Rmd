@@ -1,0 +1,91 @@
+---
+title: "Datos cuantitativos 1"
+author: "Moises"
+date: "2/3/2020"
+output: html_document
+---
+## Datos cuantitativos
+
+Los datos cuantitativos son los que expresan cantidades que se representan mediante números. Éstos se suelen clasificar en continuos y discretos.
+
+- Los datos continuos son los que, si existiese la posibilidad de medirlos con precisión infinita, en principio podrían tomar todos los valores de un intervalo de la recta real. A modo de ejemplo, el peso, la altura, el tiempo… son datos de este tipo.
+
+- Por su parte, los datos discretos son los que pueden tomar un solo conjunto contable de valores. El número de colores de un gato, el número de individuos que conforman una población son algunos ejemplos de este tipo de datos.
+
+Conviene tener en cuenta que esta división es solo teórica. Es decir, en la práctica, todos estos datos son discretos puesto que la precisión infinita no existe. Sin embargo, es necesario de vez en cuando suponer los datos de tipo continuo para así poder utilizar técnicas específicas en su análisis.
+ 
+## Las frecuencias
+
+## Ejemplo 1
+
+Se han pedido las edades a 20 clientes de un museo. Las respuestas obtenidas han sido las siguientes:
+```{r}
+edad = c(15,18,25,40,30,29,56,40,13,27,42,23,11,26,25,32,30,40,33,29)
+
+# Recordemos que solamente nos interesan las frecuencias de las edades observadas. Es decir, solamente nos interesan
+
+table(edad)
+```
+
+Calculemos el resto de frecuencias como ya sabemos
+
+```{r}
+
+round(prop.table(table(edad)),3)
+
+cumsum(table(edad))
+
+round(cumsum(prop.table(table(edad))),3)
+```
+
+
+## Frecuencias de datos cuantitativos
+
+En general, supongamos que tenemos n observaciones de una propiedad que se mide con un número real y obtenemos la variable cuantitativa formada por los datos
+x1,…,xn
+
+Sean ahora X1,…,Xk los valores distintos que aparecen en esta lista de datos y considerémoslos ordenados
+X1<X2<⋯<Xk
+
+Entonces, en esta variable cuantitativa
+- La frecuencia absoluta de Xi es el número ni de elementos que son iguales a Xi
+- La frecuencia relativa de Xi es fi=nin
+= La frecuencia absoluta acumulada de Xi es Ni=∑ij=1nj
+- La frecuencia relativa acumulada de Xi es Fi=Nin
+
+
+## Ejemplo 2
+
+Lanzamos 25 veces un dado de 6 caras y anotamos las puntuaciones obtenidas en cada tirada.
+
+En este caso, n=25
+
+y, los distintos valores observados son
+
+X1=1, X2=2, X3=3, X4=4, X5=5, X6=6
+
+Nos interesa ahora calcular las frecuencias de este experimento. Además, las organizaremos en un data frame para observarlas de forma más clara y sencilla en una tabla.
+
+```{r}
+set.seed(162017)
+dados = sample(1:6,25,replace = TRUE)
+dados
+
+set.seed(NULL)
+
+table(dados)
+round(prop.table(table(dados)),2)
+cumsum(table(dados))
+round(cumsum(prop.table(table(dados))),2)
+
+dados.df = data.frame(Puntuacion = 1:6,
+                      Fr.abs = as.vector(table(dados)),
+                      Fr.rel = as.vector(round(prop.table(table(dados)),2)),
+                      Fr.acu = as.vector(cumsum(table(dados))),
+                      Fr.racu = as.vector(round(cumsum(prop.table(table(dados))),2)))
+
+#¡IMPORTANTE! Para entrar una tabla unidimensional como una variable en un data frame, es conveniente transformarla en vector con as.vector. Si no, cada table y cada prop.table añadirían una columna extra con los nombres de los niveles.
+
+dados.df
+
+```

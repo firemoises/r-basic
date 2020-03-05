@@ -1,0 +1,146 @@
+---
+title: "El uso de table 3 y las tablas bidimensionales"
+author: "Moises"
+date: "26/2/2020"
+output: html_document
+---
+La función table() también permite construir tablas de frecuencias conjuntas de dos o más variables.
+
+Supongamos que el vector Respuestas anterior contiene las respuestas a una pregunta dadas por unos individuos cuyos sexos tenemos almacenados en un vector Sexo, en el mismo orden que sus respuestas. En este caso, podemos construir una tabla que nos diga cuántas personas de cada sexo han dado cada respuesta.
+
+```{r}
+
+Respuestas=factor(sample(c("Si", "No"), size = 12, replace = TRUE)) 
+
+Sexo= sample(c("H", "M"), size = length(Respuestas), replace = TRUE) 
+
+table(Respuestas ,Sexo)
+```
+
+Ejercicio
+- Comprobad qué ocurre si cambiamos el orden de las columnas en la función table()
+- Usad la función t() para transponer ambas tablas y comprobad el resultado
+```{r}
+
+t(table(Respuestas ,Sexo)) #Con esto facilmente puedes transponer la tabla anterior
+
+```
+
+Para referirnos a una entrada de una tabla bidimensional podemos usar el sufijo [ , ] como si estuviéramos en una matriz o un data frame. Dentro de los corchetes, tanto podemos usar los índices como los nombres (entre comillas) de los niveles.
+
+```{r}
+table(Respuestas ,Sexo)[1,2] #Para buscar una celda de una tabla por posicion
+table(Respuestas ,Sexo)["No","M"] #Para buscar una celda por el nombre de la fila y luego la columna
+```
+
+## Los tipos de frecuencias relativas de las tablas bidimensionales
+
+Como en el caso unidimensional, la función prop.table() sirve para calcular tablas bidimensionales de frecuencias relativas conjuntas de pares de variables. Pero en el caso bidimensional tenemos dos tipos de frecuencias relativas:
+
+- Frecuencias relativas globales: para cada par de niveles, uno de cada variable, la fracción de individuos que pertenecen a ambos niveles respecto del total de la muestra.
+    - Por ejemplo: la proporcion de mujeres y hombres que dijeron si o no respecto al TOTAL de la poblacion
+
+- Frecuencias relativas marginales: dentro de cada nivel de una variable y para cada nivel de la otra, la fracción de individuos que pertenecen al segundo nivel respecto del total de la subpoblación definida por el primer nivel.
+    - Por ejemplo: la proporcion de mujeres que dijeron si o no respecto a SOLO la poblacion de mujeres
+
+```{r}
+
+prop.table(table(Sexo,Respuestas)) #Por Frecuencias relativas globales
+
+#Para obtener las marginales, debemos usar el parámetro margin al aplicar la función prop.table() a la table. Con margin=1 obtenemos las frecuencias relativas de las filas y con margin=2, de las columnas.
+
+prop.table(table(Sexo,Respuestas), margin=1) #Por Frecuencias relativas marginales por FILAS
+
+prop.table(table(Sexo,Respuestas), margin=2) #Por Frecuencias relativas marginales por COLUMNAS
+
+
+```
+
+## La funcion crosstable
+
+La función CrossTable() del paquete gmodels permite producir (especificando el parámetro prop.chisq=FALSE) un resumen de la tabla de frecuencias absolutas y las tres tablas de frecuencias relativas de dos variables en un formato adecuado para su visualización.
+
+La leyenda Cell Contents explica los contenidos de cada celda de la tabla: la frecuencia absoluta, la frecuencia relativa por filas, la frecuencia relativa por columnas, y la frecuencia relativa global. Esta función dispone de muchos parámetros que permiten modificar el contenido de las celdas, y que podéis consultar en help(CrossTable).
+
+```{r}
+library(gmodels)
+CrossTable(Sexo,Respuestas, prop.chisq = FALSE) #Esta funcion genera las frecuencias mencionadas anteiormente pero todas juntas, cada fila y columna muestra dicha informacion en el siguiente orden: 
+#- Frencuencia absoluta
+#- Frencuencia relativa marginal por fila
+#- Frencuencia relativa marginal por columna
+#- Frencuencia relativa global
+
+```
+
+Una tabla de contingencia bidimensional es, básicamente, una matriz con algunos atributos extra. En particular, podemos usar sobre estas tablas la mayoría de las funciones para matrices que tengan sentido para tablas:
+
+- rowSums() y colSums() se pueden aplicar a una tabla y suman sus filas y sus columnas, respectivamente.
+
+- También podemos usar sobre una tabla bidimensional (o, en general, multidimensional) la función apply() con la misma sintaxis que para matrices.
+
+```{r}
+table(Sexo,Respuestas) 
+
+colSums(table(Sexo,Respuestas)) #Cuantos respondieron que si o no con frecuencias absolutas
+
+rowSums(table(Sexo,Respuestas)) #Cuantas mujeres y hombres respondieron que si o no con frecuencias absolutas
+
+colSums(prop.table(table(Sexo,Respuestas))) #Cuantos respondieron que si o no con frecuencias relativas
+
+rowSums(prop.table(table(Sexo,Respuestas))) #Cuantas mujeres y hombres respondieron que si o no con frecuencias relativas
+
+apply(table(Sexo,Respuestas), FUN=mean, MARGIN = 1) #La media de hombres y mujeres
+
+apply(table(Sexo,Respuestas), FUN=mean, MARGIN = 2) #La media de respuestas si y no
+
+apply(table(Sexo,Respuestas), FUN=sqrt, MARGIN = c(1,2) ) #La raiz cuadrada de cada uno de los elementos en la tabla, se usa c(1,2) porque hace referencia a que hagas la funcion en la primera y segunda variable
+
+
+```
+
+## Las tablas de frecuencias multidimensionales
+
+### Ejemplo con 3 dimensiones
+
+```{r}
+
+Respuestas2 = sample(c("Si","No"), size = 100, replace = TRUE)
+sexo2= sample(c("H","M"), size = 100, replace = TRUE)
+places = sample(c("San Juan","Bogota","Medellin","Jarabacoa","La Romana"), size = 100, replace = TRUE)
+
+table(sexo2,Respuestas2,places) #Se crea una tabla bidimensional por cada place
+
+ftable(sexo2,Respuestas2,places) #En toda una tabla se muestra toda la info
+
+ftable(sexo2,Respuestas2,places, col.vars =c("Respuestas2","sexo2")) #Con el parametro col.vars puedes cambiar el orden y cantidad de las columnas
+
+```
+
+### Filtrar las tablas
+```{r}
+
+table(sexo2,Respuestas2,places)["M","Si","San Juan"] #Las mujeres que dijeron que si en San Juan
+table(sexo2,Respuestas2,places)[,"No","Medellin"] #Las mujeres y hombres que dijeron que no en medellin
+table(sexo2,Respuestas2,places)["H",,"Bogota"] #Los hombres en Bogota
+table(sexo2,Respuestas2,places)[,"Si",] #Los que dijeron que si
+
+```
+
+### Frecuencias relativas
+```{r}
+
+prop.table(table(sexo2,Respuestas2,places)) #Por frecuencias relativas globales, osea el 100% sera el total de individuos encuestados
+
+prop.table(table(sexo2,Respuestas2,places),margin = 3) #Por frecuencias marginales por pais, margin es igual 3 para hacer referencia a que es por lugar, osea el 100% sera por lugar
+
+prop.table(table(sexo2,Respuestas2,places),margin = c(1,3)) #Por frecuencias marginales por pais, margin es igual c(1,3) para hacer referencia a que es por sexo y por lugar, osea el 100% sera por sexo de cada pais
+
+
+ftable(prop.table(table(sexo2,Respuestas2,places))) #Por frecuencias relativas globales, osea el 100% sera el total de individuos encuestados
+
+ftable(prop.table(table(sexo2,Respuestas2,places),margin = 3))#Por frecuencias marginales por pais, margin es igual 3 para hacer referencia a que es por lugar, osea el 100% sera por lugar
+
+ftable(prop.table(table(sexo2,Respuestas2,places),margin = c(1,3)))#Por frecuencias marginales por pais, margin es igual c(1,3) para hacer referencia a que es por sexo y por lugar, osea el 100% sera por sexo de cada pais
+
+```
+

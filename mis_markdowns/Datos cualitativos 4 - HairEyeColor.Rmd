@@ -1,0 +1,39 @@
+---
+title: "Datos cualitativos 4 - DF HairEyeColor"
+author: "Moises"
+date: "26/2/2020"
+output: html_document
+---
+#Ejemplo de color de ojos y pelo por sexo
+```{r}
+
+table_hec = HairEyeColor
+
+table_hec
+
+sum(table_hec) #Esto traera el numero de individuos totales
+
+prop.table(table_hec, margin=3) #La frecuencia relativa marginal por sexo
+
+prop.table(table_hec, margin=c(2,3)) #La frecuencia relativa marginal por sexo y color de ojos
+
+```
+
+### aperm() 
+Para cambiar el orden de las variables o columnas
+
+```{r}
+
+aperm(table_hec, perm=c("Sex","Hair","Eye"))
+
+```
+
+### Libreria KableExtra
+
+Con esto se crea un dataframe de la tabla
+
+```{r}
+library(KableExtra)
+kable(table_hec) #Con esto se crea un dataframe de la tabla y muestra la informacion de forma rectangular
+```
+

@@ -1,0 +1,107 @@
+---
+title: "Datos cualitativos 7 - Ejemplo final"
+author: "Moises"
+date: "28/2/2020"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+## Un ejemplo final
+
+Vamos a llevar a cabo un análisis completo de un ejemplo con lo que hemos aprendido en esta lección y aprovecharemos para aprender algo nuevo.
+
+El objeto de datos HairEyeColor que lleva predefinido R es una tabla de frecuencias absolutas de tres variables cualitativas: color de cabello (Hair), color de los ojos (Eye) y sexo (Sex).
+
+Vamos a extraer de esta tabla una tabla bidimensional de frecuencias absolutas de las variables Eye y Hair, sin distinguir según el sexo. La manera más sencilla de obtener esta tabla es sumando las subtablas de frecuencias para hombres y mujeres, y aplicando as.table() al resultado para transformarlo en una table por si no lo es.
+
+Vamos a traducir al castellano los nombres de las variables de esta tabla y de sus niveles. Esto lo podemos llevar a cabo en un solo paso con la función dimnames() que ya usamos sobre data frames. El resultado de aplicar esta función a una table es una list cuyas componentes son los niveles de cada variable.
+
+## Ejercicio 1
+Proceso para juntar el color de ojos y pelo sin tener en cuenta el sexo, osea llevarla de tridimensional a bidimensional
+
+```{r}
+
+HEC = HairEyeColor #Guardamos HairEyeColor en una variable
+
+dimnames(HEC) #Aqui se puede ver cada variable con sus niveles
+
+male_table = HEC[,,"Male"] #Filtro solo los datos de los hombres y los guardo
+female_table = HEC[,,"Female"] #Filtro solo los datos de las mujeres y los guardo
+
+HEC_table = male_table+female_table #Junto las dos tablas y listo
+
+HEC_table
+```
+
+## Ejercicio 2. 
+Redefinid dicha list para tener los niveles de los factores en castellano
+
+```{r}
+
+dimnames(HEC_table) #Con dimnames podremos generar una lista de HEC_table dimnames con sus factores y niveles
+
+dimnames(HEC_table) = list(
+   Pelo = c("Negro","Marron","Pelirrojo","Rubio"),
+  Ojos = c("Marrones","Azules","Cremas","Verdes")
+) #Por lo que podemos redefinir dicha lista con los nuevos valores
+
+dimnames(HEC_table) # Y listo
+
+```
+## Ejercicio 3
+A continuación, vamos a calcular el número total de individuos representados en esta tabla:
+```{r}
+
+sum(HEC_table) #Numero total de individuos, esto se puede hacer con este dataframe porque es un table y los tables don dataframes numericos
+
+```
+
+## Ejercicio 4
+Las tablas de frecuencias absolutas y relativas de cada variable,
+```{r}
+
+colSums(HEC_table) #Sumando todas las columnas tenemos la cantidad de individuos por ojos
+
+rowSums(HEC_table) #Sumando todas las filas tenemos la cantidad de individuos por pelo
+
+prop.table(colSums(HEC_table)) #Para obtener la frecuencia relativa global
+
+prop.table(rowSums(HEC_table)) #Para obtener la frecuencia relativa global
+
+
+```
+
+## Ejercicio 5
+Representaremos estas últimas en sendos diagramas de barras.
+
+```{r}
+par(mfrow=c(1,2)) #Para poder poner 2 o mas graficos uno al lado del otro
+barplot(prop.table(colSums(HEC_table)), col=c("brown","blue","white","green"), ylim=c(0,0.5))
+barplot(prop.table(rowSums(HEC_table)), col=c("black","brown","red","yellow"),ylim=c(0,0.5))
+
+```
+
+## Ejercicio 6
+
+En el diagrama anterior vemos que el color dominante de cabellos es el castaño, mientras que en el color de ojos el marrón y el azul están prácticamente empatados. Pasamos ahora a calcular las tablas de frecuencias relativas y dibujar los dos diagramas de barras de las frecuencias relativas marginales.
+```{r}
+
+round(prop.table(HEC_table),3) # Frecuencia relativa global
+
+round(prop.table(HEC_table, margin=1),3) # Frecuencia relativa marginal por ojos
+
+round(prop.table(HEC_table, margin=2),3) # Frecuencia relativa marginal por pelo
+
+
+```
+
+## Ejercicio 7
+Haz 2 graficos con las frecuencias relativas marginales con colores, titulo y leyendas
+```{r}
+par(mfrow=c(1,2))
+barplot(round(prop.table(HEC_table, margin=1),3), col=c("black","brown","red","yellow"),ylim=c(0,0.90),beside=TRUE,legend.text = TRUE, main="Frecuencias relativas de colores \nde cabello en cada color de ojos")
+
+barplot(round(t(prop.table(HEC_table, margin=2)),3), col=c("brown","blue","white","green"),ylim=c(0,0.60),beside=TRUE,legend.text = TRUE, main="Frecuencias relativas de colores \nde ojos en cada color de pelo") #IMPORTANTE: En este segundo grafico hay que transponer la tabla para que las filas y columnas se inviertan ya que la leyenda se toma de las filas NO de las columnas
+```
+

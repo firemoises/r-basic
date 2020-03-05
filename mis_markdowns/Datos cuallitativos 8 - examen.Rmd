@@ -1,0 +1,160 @@
+---
+title: "Datos cuallitativos 8 - examen"
+author: "Moises"
+date: "1/3/2020"
+output: html_document
+---
+
+Instalad y cargad el paquete MASS. Encontraréis una tabla de datos llamada birthwt sobre factores que pueden incidir en el peso de los niños al nacer. Con str() y head(), explorad la estructura, y con help(), mirad el significado de cada variable.
+
+```{r}
+library(MASS)
+
+```
+
+1. Utiliza str() y head() para explorar la estructura, y con help(), mirar el significado de cada variable.
+
+```{r}
+
+df_bebes = birthwt
+
+str(df_bebes)
+
+head(df_bebes)
+
+```
+
+2. Calcula una tabla de frecuencias relativas marginales de los pares (raza de la madre, peso inferior a 2.5 kg o no) que permita ver si la raza de la madre influye en el peso del bebé. 
+
+```{r}
+
+df_bebes$bwt[df_bebes$bwt < 2500] = 0
+df_bebes$bwt[df_bebes$bwt >= 2500] = 1
+
+madre_raza = as.factor(df_bebes$race)
+madre_raza = factor(madre_raza, levels = c(1,2,3), labels = c("Blanca","Negra","Otro"))
+
+peso_bebe = as.factor(df_bebes$bwt)
+peso_bebe = factor(peso_bebe, levels = c(1,0), labels = c("Mayor o igual a 2.5 KG","Menor a 2.5 KG"))
+
+prop.table(table(madre_raza,peso_bebe),margin = 1)
+
+#Aqui se puede ver que normalmente los bebes de madres blancas suelen nacer con un peso mayor a 2.5KG a difernecia de otras razas
+
+```
+
+
+3. Dibuja un diagrama de mosaico de la tabla del ejercicio anterior.
+```{r}
+
+plot(table(madre_raza,peso_bebe), main="Gráfico de mosaico de las variables
+     \"Raza de la madre\" y \"Peso del bebe\"",col=c("green","red"))
+
+```
+
+4. Dibuja un diagrama bidimensional de barras, con las barras organizadas en bloques, que permita visualizar la información de los ejercicios anteriores. Aprovecha para nombres adecuados a los bloques, colores a las barras, y añadir una leyenda que explique qué representa cada barra. 
+```{r}
+
+barplot(prop.table(table(madre_raza,peso_bebe),margin = 1),beside=TRUE,legend.text = TRUE,col=c("white","black","blue"), ,ylim=c(0,0.90))
+
+
+```
+
+5. ¿Se puede obtener alguna conclusión de la tabla y el diagrama de barras anterior? Argumenta tu respuesta
+
+```{r}
+
+relacion_raza_peso = prop.table(table(madre_raza,peso_bebe),margin = 1)
+
+diferencia_blanca_negra = round((relacion_raza_peso["Blanca","Mayor o igual a 2.5 KG"] - relacion_raza_peso["Negra","Mayor o igual a 2.5 KG"])*100,2)
+
+diferencia_blanca_otro = round((relacion_raza_peso["Blanca","Mayor o igual a 2.5 KG"] - relacion_raza_peso["Otro","Mayor o igual a 2.5 KG"])*100,2)
+  
+```
+
+
+Ahi se puede ver que normalmente los bebes de madres blancas suelen nacer con un peso mayor a 2.5KG. De hecho en comparacion con las madres negras suele ser un  `r diferencia_blanca_negra`% mas y en relacion a las otras razas suele ser un `r diferencia_blanca_otro`% mas
+
+6. Repite los cuatro ejercicios anteriores para los pares (madre fumadora o no, peso inferior a 2.5 kg o no) y para los pares (madre hipertensa o no, peso inferior a 2.5 kg o no.
+```{r}
+
+df_bebes = birthwt
+
+df_bebes$bwt[df_bebes$bwt < 2500] = 0
+df_bebes$bwt[df_bebes$bwt >= 2500] = 1
+
+madre_fumadora = as.factor(df_bebes$smoke)
+madre_fumadora = factor(madre_fumadora, levels = c(1,0), labels = c("SI fuma","NO fuma"))
+
+madre_hipertensa = as.factor(df_bebes$ht)
+madre_hipertensa = factor(madre_hipertensa, levels = c(1,0), labels = c("Es hipertensa","NO es hipertensa"))
+
+peso_bebe = as.factor(df_bebes$bwt)
+peso_bebe = factor(peso_bebe, levels = c(1,0), labels = c("Mayor o igual a 2.5 KG","Menor a 2.5 KG"))
+
+##Ejercicio 6.1 
+prop.table(table(madre_fumadora,peso_bebe),margin = 1) #Relacion madre fumadora con peso del bebe
+prop.table(table(madre_hipertensa,peso_bebe),margin = 1) #Relacion madre hipertensa con peso del bebe
+
+#Aqui se puede ver que normalmente los bebes de madres blancas suelen nacer con un peso mayor a 2.5KG a difernecia de otras razas
+
+
+```
+
+```{r}
+
+##Ejercicio 6.2
+
+plot(table(madre_fumadora,peso_bebe), main="Gráfico de mosaico de las variables
+     \"Madre fumadora\" y \"Peso del bebe\"",col=c("green","red"))
+
+plot(table(madre_hipertensa,peso_bebe), main="Gráfico de mosaico de las variables
+     \"Madre hipertensa\" y \"Peso del bebe\"",col=c("green","red"))
+
+```
+
+```{r}
+
+##Ejercicio 6.3 
+
+barplot(prop.table(table(madre_fumadora,peso_bebe),margin = 1),beside=TRUE,legend.text = TRUE, ylim=c(0,0.90))
+
+barplot(prop.table(table(madre_hipertensa,peso_bebe),margin = 1),beside=TRUE,legend.text = TRUE, ylim=c(0,0.90))
+
+```
+
+```{r}
+
+##Ejercicio 6.4
+
+relacion_raza_fuma = prop.table(table(madre_fumadora,peso_bebe),margin = 1)
+
+diferencia_blanca_negra_fuma = round((relacion_raza_fuma["NO fuma","Mayor o igual a 2.5 KG"] - relacion_raza_fuma["SI fuma","Mayor o igual a 2.5 KG"])*100,2)
+
+
+relacion_raza_hipertensa = prop.table(table(madre_hipertensa,peso_bebe),margin = 1)
+
+diferencia_blanca_negra_hiper = round((relacion_raza_hipertensa["NO es hipertensa","Mayor o igual a 2.5 KG"] - relacion_raza_hipertensa["Es hipertensa","Mayor o igual a 2.5 KG"])*100,2)
+
+
+
+```
+
+Ahi se puede ver que normalmente los bebes de madres NO fumadoras en comparacion con las madres fumadoras, en un `r diferencia_blanca_negra_fuma`% mas de las ocasiones suelen nacer con bebes mayores a 2.5 KG
+
+y tambien se puede ver que normalmente los bebes de madres NO hipertensas en comparacion con las madres hipertensas, en un `r diferencia_blanca_negra_hiper`% mas de las ocasiones suelen nacer con bebes mayores a 2.5 KG
+
+7. Calcula una tabla de frecuencias relativas marginales de las ternas (raza de la madre, madre fumadora o no, peso inferior a 2.5 kg o no) que permita ver si la raza de la madre y su condición de fumadora o no fumadora influyen en el peso del bebé. 
+
+```{r}
+
+ftable(prop.table(table(madre_fumadora,madre_raza,peso_bebe),margin = c(1,2))) #Se puede ver como las mas propensas a tener hijos menor a 2.5KG son las madres negras que fuman mientras las que son menos propensas, son las madres blancas que no fuman
+
+
+```
+
+8.Dibuja un diagrama de mosaico de la tabla del ejercicio anterior.
+```{r}
+plot(prop.table(table(madre_fumadora,madre_raza,peso_bebe),margin = 3), main="que permita ver si la raza de la \nmadre y su condición de fumadora o no \nfumadora influyen en el peso del bebé")
+```
+

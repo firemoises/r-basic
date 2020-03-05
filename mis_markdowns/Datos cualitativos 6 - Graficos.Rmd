@@ -1,0 +1,135 @@
+---
+title: "Datos cualitativos 6 - Graficos"
+author: "Moises"
+date: "27/2/2020"
+output: html_document
+---
+
+## Diagrama de barras
+
+El tipo de gráfico más usado para representar variables cualitativas son los diagramas de barras (bar plots). Como su nombre indica, un diagrama de barras contiene, para cada nivel de la variable cualitativa, una barra de altura su frecuencia.
+
+La manera más sencilla de dibujar un diagrama de barras de las frecuencias absolutas o relativas de una variable cualitativa es usando la instrucción barplot() aplicada a la tabla correspondiente.
+
+¡Atención! Como pasaba con prop.table(), el argumento de barplot ha de ser una tabla, y, por consiguiente, se ha de aplicar al resultado de table() o de prop.table(), nunca al vector de datos original.
+
+```{r}
+
+sexo = sample(c("H","M"),size = 30,replace = TRUE)
+
+Respuestas = sample(c("Si","No"),size = 30,replace = TRUE)
+
+barplot(table(sexo), col=c("lightblue","pink"), main="Diagrama de barras de 
+las frecuencias absolutas\n de la variable \"sexo\"") #De frecuencias absolutas
+
+barplot(prop.table(table(Respuestas)),col=c("black","yellow"), main="Diagrama de barras de frecuencias 
+        relativas\n de la variable \"Respuestas\"") #De frecuencias relativas
+
+#IMPORTANTE: El barplot solo funciona con tables osea con tablas de frecuencias
+```
+
+## Diagrama de barras - Parámetros
+
+Habréis observado que en las funciones barplot() anteriores hemos usado el parámetro main para poner título a los diagramas; en general, la función barplot() admite los parámetros de plot que tienen sentido en el contexto de los diagramas de barras: xlab, ylab, main, etc. Los parámetros disponibles se pueden consultar en help(barplot). Aquí sólo vamos a comentar algunos.
+
+```{r}
+par(mfrow=c(1,2)) #Para poder poner 2 o mas graficos uno al lado del otro
+barplot(table(Respuestas), col=c("green"))
+barplot(table(Respuestas), col=c("red","blue"))
+```
+
+## Diagrama de barras horizontal
+```{r}
+barplot(table(Respuestas), horiz=TRUE)
+```
+
+## Diagrama de barras - Tabla bidimensional
+```{r}
+barplot(table(sexo,Respuestas), legend.text = TRUE) # Con las barras encima y abajo 
+
+barplot(table(sexo,Respuestas), beside=TRUE, legend.text=TRUE) # Con las barras al lado
+```
+
+## Diagrama de barras - Parámetros de las leyendas
+
+```{r}
+barplot(table(Respuestas,sexo), beside=TRUE, names=c("Men", "Women"), 
+        col=c("yellow","lightblue"), legend.text=c("No","Yes"))
+```
+
+## Diagrama circular
+
+Un tipo muy popular de representación gráfica de variables cualitativas son los diagramas circulares. En un diagrama circular (pie chart) se representan los niveles de una variable cualitativa como sectores circulares de un círculo, de manera que el ángulo (o equivalentemente, el área) de cada sector sea proporcional a la frecuencia del nivel al que corresponde.
+
+Con R, este tipo de diagramas se producen con la instrucción pie, de nuevo aplicada a una tabla de frecuencias y no al vector original.
+
+## Diagrama circular - Parámetros
+
+La función pie admite muchos parámetros para modificar el resultado: se pueden cambiar los colores con col, se pueden cambiar los nombres de los niveles con names, se puede poner un título con main, etc.; podéis consultar la lista completa de parámetros en help(pie).
+
+```{r}
+
+x = sample(c(1,2,3,4,5),size = 12,replace = TRUE)
+
+pie(table(x), main="Diagrama circular de la variable x")
+
+pie(table(Respuestas), main="Diagrama circular de la variable Respuestas")
+
+```
+
+
+## Diagrama circular
+
+Pese a su popularidad, es poco recomendable usar diagramas circulares porque a veces es difícil, a simple vista, comprender las relaciones entre las frecuencias que representan.
+
+
+## Gráficos de mosaico
+
+Otra representación de las tablas multidimensionales de frecuencias son los gráficos de mosaico. Estos gráficos se obtienen sustituyendo cada entrada de la tabla de frecuencias por una región rectangular de área proporcional a su valor.
+
+En concreto, para obtener el gráfico de mosaico de una tabla bidimensional, se parte de un cuadrado de lado 1, primero se divide en barras verticales de amplitudes iguales a las frecuencias relativas de una variable, y luego cada barra se divide, a lo alto, en regiones de alturas proporcionales a las frecuencias relativas marginales de cada nivel de la otra variable, dentro del nivel correspondiente de la primera variable.
+
+Un gráfico de mosaico de una tabla se obtiene con R aplicando la función plot a la tabla, o también la función mosaicplot. Esta última también se puede aplicar a matrices.
+
+
+```{r}
+
+plot(table(sexo,Respuestas), main="Gráfico de mosaico de las variables
+     \"sexo\" y \"Respuestas\"")
+
+```
+
+
+## Gráficos de mosaico tridimensionales
+
+En el gráfico de mosaico de una tabla tridimensional, primero se divide el cuadrado en barras verticales de amplitudes iguales a las frecuencias relativas de una variable.
+
+Luego cada barra se divide, a lo alto, en regiones de alturas proporcionales a las frecuencias relativas marginales de cada nivel de una segunda variable, dentro del nivel correspondiente de la primera variable.
+
+Finalmente, cada sector rectangular se vuelve a dividir a lo ancho en regiones de amplitudes proporcionales a las frecuencias relativas marginales de cada nivel de la tercera variable dentro de la combinación correspondiente de niveles de las otras dos.
+
+```{r}
+plot(HairEyeColor, main="Gráfico de mosaico de la tabla HairEyeColor", 
+     col=c("pink","lightblue"))
+```
+
+## Muchos más formas de reproducir gráficos tridimensionales
+
+Además de sus parámetros usuales, la función plot admite algunos parámetros específicos cuando se usa para producir el gráfico de mosaico de una tabla. Estos parámetros se pueden consultar en help(mosaicplot).
+
+Los paquetes vcd y vcdExtra incluyen otras funciones que producen representaciones gráficas interesantes de tablas tridimensionales.
+
+- La función cotabplot de vcd produce un diagrama de mosaico para cada nivel de la tercera variable.
+- La función mosaic3d de vcdExtra produce un diagrama de mosaico tridimensional en una ventana de una aplicación para gráficos 3D interactivos.
+
+```{r}
+library(vcd)
+library(vcdExtra)
+library(rgl)
+
+cotabplot(HairEyeColor)
+
+mosaic3d(HairEyeColor, type = "expected", box=TRUE, col=c("lightblue","pink") ) # Esto imprime un grafico 3d interactivo
+
+```
+
