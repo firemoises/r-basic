@@ -1,0 +1,109 @@
+---
+title: "Definiendo una derivada"
+author: "Moises"
+date: "17/3/2020"
+output: html_document
+---
+
+# Apuntes matematicas - Derivadas
+
+Primero imaginemos que en un grafico tenemos una curva de una funcion cualquiera del 0 al 10, 
+```{r}
+
+curva = function(x){
+  cos(x+2)+2
+}
+
+curve(curva(x), 0,10,col = "red")
+
+```
+
+A esa misma curva vamos a marcarle 2 puntos y unirlos por una recta
+```{r}
+
+plot(curva, xlim = c(0,10), ylim = c(0,5))
+abline(h=0:9, v = -3:3, lty="dotted", col = "grey") #grid
+points(2,1.35, pch = 19) #punto 1
+points(3,2.25, pch = 19) #punto 2
+lines(c(2,3), c(1.35,2.25), col = "red") #recta
+
+```
+
+Dicha recta es una recta secante a ambos puntos, porque la definicion de una recta secante es, una recta que une 2 o mas puntos
+
+y la formula para encontrarla es:
+
+(f(x+h) - f(x))/h
+
+Donde h es el incremento de x, en este caso el incremento del primer punto(x) es 1 porque las coordenadas son (2,3) osea (x,x+h)
+
+Veamoslo aqui
+
+```{r}
+
+secante = (curva(2+1) - curva(2))/1
+secante
+
+```
+
+La secante mide `r secante`
+
+Pero que tal si h fuera 0.00003. En ese caso obtendriamos una recta tocando practicamente en un solo punto (porque ambos estarian demasiado cerca).
+
+En ese caso estariamos buscando la tangente o lo que es lo mismo que una recta que toca UN solo punto de la grafico
+
+O lo que es lo mismo que la derivada de una funcion en un punto x
+
+En otras palabras
+```{r}
+
+derivada_o_tangente = (curva(2+0.00003) - curva(2))/0.00003
+derivada_o_tangente
+
+```
+
+La derivada de la funcion curve() en el punto (2,1,35) es `r derivada_o_tangente`
+
+pudieramos incluso crear una funcion para futuros usos
+```{r}
+
+derivame = function(x,curva){
+  (curva(x+0.0000000000001) - curva(x))/0.0000000000001
+}
+
+derivame(2,curva)
+
+```
+
+Y podemos confirmar que funciona de la siguiente forma
+
+Si el coseno de 1 es igual 0.5403023 y la derivada del seno es igual al seno, entonces la derivada del seno en el punto 1 deberia ser igual a 0.5403023
+```{r}
+derivame(1,sin)
+```
+
+Aqui se puede comprobar que la funcion funciona perfectamente
+
+
+Ahora vamos a volver al grafico que hicimos anteiormente y vamos a identificar en que punto la derivada o pendiente es 0
+```{r}
+plot(curva, xlim = c(0,10), ylim = c(0,5))
+abline(h=0:9, v = -3:3, lty="dotted", col = "grey") #grid
+points(2,1.35, pch = 19) #punto 1
+points(3,2.25, pch = 19) #punto 2
+lines(c(2,3), c(1.35,2.25), col = "red") #recta
+
+```
+
+Al mirar el grafico vemos que cuando x=1 y x=7.4(mas o  menos) la curva es practicamente plana, vamos entonces a derivar esa funcion cuando x=1 y x=7.4
+```{r}
+
+derivame(1.0999,curva)
+
+derivame(7.44,curva) #Lo mismo pasa cuando x es 7.4
+
+```
+
+Efectivamente vemos que en el punto x=1.0999 la pendiente es practicamente 0, lo mismo pasa cuando x es 7.44
+
+Asi hemos obtenido un metodo para conocer como encontrar los punto mas bajos en un grafico, osea cuando ya la funcion no baja mas, osea cuando la tangente de x es 0

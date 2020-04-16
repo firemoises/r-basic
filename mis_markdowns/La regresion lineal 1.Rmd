@@ -1,0 +1,269 @@
+---
+title: "La regresion lineal 1"
+author: "Moises"
+date: "18/3/2020"
+output: html_document
+---
+
+## Introducción
+
+Seguramente, en algún momento de vuestra vida ya sea hojeando un libro de matemáticas, curioseando artículos científicos… habréis visto una línea recta o algún otro tipo de curva en un gráfico que se ajusta a las observaciones representadas por medio de puntos en el plano.
+
+En general, la situación es la siguiente: supongamos que tenemos una serie de puntos en el plano cartesiano R2, de la forma
+
+(x1,y1), …, (xn,yn)
+
+que representan las observaciones de dos variables numéricas. Digamos que x es la edad e y el peso de n estudiantes.
+
+Nuestro objetivo: describir la relación entre la variable independiente, x, y la variable dependiente, y, a partir de estas observaciones.
+
+Para ello, lo que haremos será buscar una función y=f(x)
+cuya gráfica se aproxime lo máximo posible a nuestros pares ordenados (xi,yi)i=1,…,n.
+
+Esta función nos dará un modelo matemático de cómo se comportan estas observaciones, lo cual nos permitirá entender mejor los mecanismos que relacionan las variables estudiadas o incluso, nos dará la oportunidad de hacer prediccciones sobre futuras observaciones.
+
+La primera opción es la más fácil. Consiste en estudiar si los puntos (xi,yi)i=1,…,n satisfacen una relación lineal de la forma
+
+y=ax+b
+
+con a,b∈R.
+
+En este caso, se busca la recta y=ax+b
+
+que mejor aproxime los puntos dados imponiendo que la suma de los cuadrados de las diferencias entre los valores yi y sus aproximaciones y~i=axi+b sea mínima. Es decir, que
+
+∑i=1n(yi−y~i)2
+
+sea mínima
+
+
+
+El objetivo de este tema no es otro más que enseñaros como hacer uso de R para obtener esta recta de regresión.
+
+Veremos también cómo se puede evaluar numéricamente si esta recta se ajusta bien a las observaciones dadas.
+
+Para ello, introduciremos algunas funciones de R y haremos uso de transformaciones logarítmicas para tratar casos en los que los puntos dados se aproximen mejor mediante una función exponencial o potencial.
+
+## Planteamiento del problema
+
+Como ya hemos dicho, el objetivo de este tema es estudiar si existe relación lineal entre las variables dependiente e independiente.
+
+Por lo general, cuando tenemos una serie de observaciones emparejadas, (xi,yi)i=1,…,n,
+
+la forma natural de almacenarlas en R es mediante una tabla de datos. Y la que más conocemos nostros es el data frame.
+
+Como recordaréis de temas anteriores, la ventaja de trabajar con este tipo de organización de datos es que luego se pueden hacer muchas cosas.
+
+## Ejemplo 1
+
+En este ejemplo, nosotros haremos uso del siguiente data frame:
+```{r}
+body = read.table("../data/bodyfat.txt", header = TRUE)
+head(body,3)
+
+#Más concretamente, trabajaremos con las variables fat y weight.
+
+body2 = body[,c(2,4)] #Aqui tomamos las segunda y cuarta columna (fat y weigth)
+names(body2) = c("Grasa","Peso") #Aqui le cambiamos los nombres
+str(body2)
+summary(body2)
+head(body2,3)
+
+```
+
+##Representación gráfica
+
+Al analizar datos, siempre es recomendable empezar con una representación gráfica que nos permita hacernos a la idea de lo que tenemos.
+
+Esto se consigue haciendo uso de la función plot, que ya hemos estudiado en detalle en lecciones anteriores. No obstante, para lo que necesitamos en este tema nos conformamos con un gráfico básico de estos puntos que nos muestre su distribución.
+
+```{r}
+plot(body2)
+```
+
+
+## Calculando la recta de regresión
+
+Para calcular la recta de regresión con R de la familia de puntos (xi,yi)i=1,…,n
+, si x es el vector (xi)i=1,…,n e y es el vector (yi)i=1,…,n, entonces, su recta de regresión se calcula mediante la instrucción
+
+lm(y~x)
+
+Cuidado con la sintaxis: primero va el vector de las variables dependientes y, seguidamente después de una tilde ~, va el vector de las variables independientes.
+
+Esto se debe a que R toma el significado de la tilde como "en función de". Es decir, la interpretación de lm(y~x) en R es "la recta de regresión de y
+en función de x".
+
+## Calculando la recta de regresión
+
+Si los vectores y y x son, en este orden, la primera y la segunda columna de un data frame de dos variables, entonces es suficiente aplicar la función lm al data frame.
+
+En general, si x e y son dos variables de un data frame, para calcular la recta de regresión de y en función de x podemos usar la instrucción
+
+lm(y~x, data = data fame)
+
+```{r}
+lm(body2$Peso~body2$Grasa) #Opción 1 # La variable dependiente siempre debe ir de primero y la independiente de segundo #El signo ~ significa "En funcion de"
+```
+
+```{r}
+lm(Peso~Grasa, data = body2) #Opción 2 #Aqui el resultado nos esta diciendo que la formula para obtener el peso de un individuo segun su grasa es y=2.151x+137.738, osea multiplicar la x por 2.151 y luego sumarle 137.738
+```
+
+Como podéis observar, las dos formas de llamar a la función dan exactamente lo mismo. Ninguna es mejor que la otra.
+
+El resultado obtenido en ambos casos significa que la recta de regresión para nuestros datos es
+
+y=2.151x+137.738
+
+Ahora, podemos superponer esta recta a nuestro gráfico anterior haciendo uso de la función abline().
+
+```{r}
+plot(body2)
+abline(lm(Peso~Grasa, data = body2), col = "purple") #Con lm() y abline podemos entonces calcular la regresion lineal de dichos datos
+```
+
+## Observación
+
+Hay que tener en cuenta que el análisis llevado a cabo hasta el momento de los pares de valores (xi,yi)i=1,…,n ha sido puramente descriptivo.
+
+Es decir, hemos mostrado que estos datos son consistentes con una función lineal, pero no hemos demostrado que la variable dependiente sea función aproximadamente lineal de la variable dependiente. Esto último necesitaría una demostración matemática, o bien un argumento biológico, pero no basta con una simple comprobación numérica.
+
+## Haciendo predicciones
+
+Eso sí, podemos utilizar todo lo hecho hasta ahora para predecir valores y~i
+en función de los xi resolviendo una simple ecuación lineal
+
+## Coeficiente de determinación
+
+El coeficiente de determinación, R2, nos es útil para evaluar numéricamente si la relación lineal obtenida es significativa o no.
+
+No explicaremos de momento como se define. Eso lo dejamos para curiosidad del usuario. Por el momento, es suficiente con saber que este coeficiente se encuentra en el intervalo [0,1]
+. Si R2 es mayor a 0.9, consideraremos que el ajuste es bueno. De lo contrario, no.
+
+## La función summary
+
+La función summary aplicada a lm nos muestra los contenidos de este objeto. Entre ellos encontramos Multiple R-squared, que no es ni más ni menos que el coeficiente de determinación, R2.
+
+Para facilitarnos las cosas y ahorrarnos información que, de momento, no nos resulta de interés, podemos aplicar summary(lm(...))$r.squared
+
+```{r}
+summary(lm(Peso~Grasa, data = body2))
+
+#Al hacer summary la parte donde dice Residuals quiere decir los margenes de error de prediccion que hay, desde el minimo, la mediana y el mayor
+
+
+```
+
+### r.squared
+El factor Multiple R-squared: se refiere a El coeficiente de determinación r cuadrado
+Y nos es útil para evaluar numéricamente si la relación lineal obtenida es significativa o no Si R cuadrado es mayor a 0.9, consideraremos que el ajuste es bueno. De lo contrario, no.
+
+```{r}
+summary(lm(Peso~Grasa, data = body2))$r.squared
+```
+
+En este caso, hemos obtenido un coeficiente de determinación de 0.3751, cosa que confirma que la recta de regresión no aproxima nada bien nuestros datos.
+
+
+## Transformaciones logarítmicas
+
+No siempre encontraremos dependencias lineales. A veces nos encontraremos otro tipo de dependencias, como por ejemplo pontencias o exponenciales.
+
+Estas se pueden transformar a lineales mediante un cambio de escala
+
+
+## Escalas logarítmicas
+
+Por lo general, es habitual encontrarnos gráficos con sus ejes en escala lineal. Es decir, las marcas en los ejes están igualmente espaciadas.
+
+A veces, es conveniente dibujar alguno de los ejes en escala logarítmica, de modo que la misma distancia entre las marcas significa el mismo cociente entre sus valores. En otras palabras, un eje en escala logarítmica representa el logaritmo de sus valores en escala lineal.
+
+Diremos que un gráfico está en escala semilogarítmica cuando su eje de abcisas está en escala lineal y, el de ordenadas, en escala logarítmica.
+
+Diremos que un gráfico está en escala doble logarítmica cuando ambos ejes están en escala logarítmica.
+
+## Interpretación gráfica
+
+Si al representar unos puntos (xi,yi)i=1,…,n
+en escala semilogarítmica observamos que siguen aproximadamente una recta, esto querrá decir que los valores log(y) siguen una ley aproximadamente lineal en los valores x, y, por lo tanto, que y sigue una ley aproximadamente exponencial en x.
+
+En efecto, si log(y)=ax+b, entonces, y=10log(y)=10ax+b=10ax⋅10b=αxβ
+
+con α=10a y β=10b
+
+## Interpretación gráfica
+
+Si al representar unos puntos (xi,yi)i=1,…,n
+en escala doble logarítmica observamos que siguen aproximadamente una recta, esto querrá decir que los valores log(y) siguen una ley aproximadamente lineal en los valores log(x), y, por lo tanto, que y sigue una ley aproximadamente potencial en x.
+
+En efecto, si log(y)=alog(x)+b, entonces, por propiedades de logaritmos
+
+y=10log(y)=10alog(x)+b=(10log(x))a⋅10b=xaβ con β=10b
+
+## Ejemplo 2
+
+En este caso trabajaremos no con un data frame, sino directamente con los dos vectores siguientes:
+```{r}
+ind = c(20,35,61,82) #Variable dependiente
+dep = c(1.2,3.6,12,36) #Variable independiente
+        
+plot(ind,dep, main = "Escala lineal")
+plot(ind,dep, log = "y", main = "Escala semilogarítmica") #IMPORTANTE tener en cuenta que este plot es lo mismo que hacer esto plot(ind,log10(dep)) osea a cada elemento del eje y le estamos sacando el logaritmo en base 10
+
+```
+
+
+```{r}
+
+plot(ind,dep, log = "y", main = "Escala semilogarítmica")
+abline(lm(log10(dep)~ind), col = "purple") #Aqui podemos ver que la relacion entre la data es muy lineal
+
+summary(lm(log10(dep)~ind))$r.squared #Y de hecho vemos que el r cuadrado es mayor a 0.9 por lo que la formula si se puede usar para hacer predicciones
+```
+
+```{r}
+plot(ind,dep, main = "Curva de regresión")
+curve(1.054^x*0.468, add = TRUE, col = "purple") #Y esta curva es que representa mejor la relacion de las variables en el primer grafico
+```
+
+## Ejemplo 3
+
+En este caso trabajaremos con el siguiente data frame:
+```{r}
+
+tiempo = 1:10
+gramos = c(0.097,0.709,2.698,6.928,15.242,29.944,52.902,83.903,120.612,161.711)
+d.f = data.frame(tiempo,gramos)
+
+#Aqui estaremos haciendo un grafico donde relacionamos como digamos un virus se multiplica de forma exponencial en el tiempo
+
+plot(d.f) #Aqui lo comprobamos que entonces el modelo no es lineal
+plot(d.f, log = "y") #Y si hacemos que el eje y este en escala log vemos que todavia no esta logrando una relacion lineal
+plot(d.f, log = "xy") #Pero si ambos ejes estan en escala logaritmica, si entonces vemos que tienen una relacion lineal
+```
+
+
+```{r}
+lm(log10(gramos)~log10(tiempo), data = d.f)
+
+summary(lm(log10(gramos)~log10(tiempo), data = d.f))$r.squared #Aqui se comprueba la relacion cerca que tienen ambos valores en sus escalas logaritmicas
+```
+
+Lo que acabamos de obtener es que
+
+log(gramos)=3.298⋅log(tiempo)−1.093
+
+es una buena aproximación de nuestros datos.
+
+Con lo cual
+
+gramos=(10^3.298*log(tiempo)) * 10−1.093=
+
+(tiempo^3.298)*0.081
+
+```{r}
+plot(d.f, main = "Curva de regresión")
+curve(x^(3.298)*0.081, add=TRUE, col = "purple")
+```
+

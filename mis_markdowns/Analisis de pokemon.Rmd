@@ -1,0 +1,57 @@
+---
+title: "Analisis de pokemon"
+author: "Moises"
+date: "28/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(reticulate) #Necesaria para usar objetos py en R
+use_python("/Users/moise/Anaconda3/python.exe",required = TRUE) #Necesaria para usar objetos py en R
+```
+
+# Pokemon (Py -> R)
+
+```{python}
+import pandas as pd
+pokemon = pd.read_csv("../data/Pokemon.csv") #Tomamos la data
+print(pokemon.head()) #Mostramos los 5 primeros resultados
+print(pokemon.shape) #Mostramos la forma y vemos que hay 800 filas y 200 columnas
+pokemon = pokemon[pokemon["Generation"]==1] #Filtramos solo a kanto
+pokemon = pokemon[["Type 1", "Type 2", "Speed"]] #Filtramos solo estas columnas
+print(pokemon.shape) #Confirmamos y vemos que ahora solo hay 166 filas y 3 columnas
+pokemon = pokemon.fillna("None") #Cambiamos los NaN por None
+print(pokemon.head(20))
+```
+
+## Transmisión de los datos de Python a R
+```{r, fig.width=7, fig.height=4}
+#Arriba mira como definimos el width y height de lo que vamos a mostrar
+
+df_pokemon_speed = py$pokemon[,"Speed"] #Creando un dataframe con informacion de Python, para esto cargamos Reticulate
+
+hist(df_pokemon_speed, breaks = 10, main = "Velocidad de los Pokemon")
+```
+
+
+# Pokemon (R -> Py)
+## Carga de datos en R
+```{r}
+
+#Ya aqui en verdad me perdi 
+
+pokemon2 <- read.csv("../data/Pokemon.csv", header = TRUE)
+head(pokemon2)
+library(tidyverse)
+pokemon2 <- pokemon2 %>% 
+  filter(Generation == 1) %>%
+  select(Type.1, Type.2, Speed) %>%
+  na.omit()
+summary(pokemon2)
+```
+
+## Transmisión de datos de R a Python
+```{python}
+print(r.pokemon2.head())
+```

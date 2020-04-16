@@ -1,0 +1,254 @@
+---
+title: "Datos cuantitativos agrupados 1"
+author: "Moises"
+date: "9/3/2020"
+output: html_document
+---
+
+## Introducción
+
+Aunque no seamos completamente conscientes de ello, tendemos a agrupar datos cuantitativos constantemente.
+
+Sin ir más lejos, calificamos de excelente a todas las notas que están sobre el 9. También decimos que una persona tiene 20 años cuando se encuentra en el intervalo [20,21). Es decir, cuando ha cumplido los 20 pero aún no tiene los 21.
+
+En estadística, existen innumerables motivos por los cuales nos interesa agrupar los datos cuando estos son cuantitativos. Uno de estos motivos puede ser perfectamente que los datos sean muy heterogéneos. En este caso, nos encontraríamos con que las frecuencias de los valores individuales serían todas muy similares, lo que daría lugar a un diagrama de barras muy difícil de interpretar, tal y como mostramos en el siguiente ejemplo.
+
+## Ejemplo 1
+
+Consideremos la siguiente muestra de 24 pesos de estudiantes:
+```{r}
+pesos = c(55.2,54.0,55.2,53.7,60.2,53.2,54.6,55.1,51.2,53.2,54.8,52.3,56.9,57.0,55.0,
+          53.5,50.9,55.1,53.6,61.2,59.5,50.3,52.7,60.0)
+```
+
+El diagrama de barras de sus frecuencias absolutas, tomando como posibles niveles todos los pesos entre su mínimo y máximo se muestra en la siguiente diapositiva.
+
+Como vemos, todas estas frecuencias se encuentran entre 0 y 2, cosa que no nos da mucha información.
+
+```{r}
+barplot(table(pesos))
+```
+
+En cambio, si dividiésemos todos estos posibles valores que puede tomar la variable cuantitativa en intervalos y tomásemos como sus frecuencias las de todos los valores que caen en dicho intervalo, la cosa cambia.
+
+Otro de los motivos por el que necesitamos muchas veces agrupar los datos cuantitativos es porque, como ya dijimos en temas anteriores, la precisión infinita no existe. Por tanto, esta imposibilidad de medir de manera exacta muchas de las magnitudes continuas (tiempo, peso, altura…) nos obliga a trabajar con aproximaciones o redondeos de valores reales y que cada uno de estos represente todo un intervalo de posibles valores.
+
+
+Por lo general, existen 3 situaciones en las cuales conviene sin lugar a dudas agrupar datos cuantitativos en intervalos, también llamados clases
+- Cuando los datos son continuos, su redondeo ya define un agrupamiento debido a la inexistencia de precisión infinita
+- Cuando los datos son discretos, pero con un número considerablemente grande de posibles valores
+- Cuando tenemos muchísimos datos y estamos interesados en estudiar las frecuencias de sus valores
+
+## Los 4 pasos
+
+Antes de estudiar unos datos agrupados, hay que, obviamente, agruparlos. Este proceso consta de 4 pasos:
+- Decidir el número de intervalos que vamos a utilizar
+- Decidir la amplitud de estos intervalos
+- Acumular los extremos de los intervalos
+- Calcular el valor representativo de cada intervalo, su marca de clase
+
+No hay una forma de agrupar datos mejor que otra. Eso sí, cada uno de los diferentes agrupamientos para un conjunto de datos podría sacar a la luz características diferentes del conjunto.
+
+## La función hist()
+
+La función de R por excelencia para estudiar datos agrupados es hist. Dicha función implementa los 4 pasos del proceso.
+
+Si le indicamos como argumentos el vector de datos y el número de intervalos que deseamos, o bien el método para determinarlo (cosa que veremos a continuación), la función agrupará los datos en el número de clases que le hemos introducido, más o menos. Eso sí, sin control de ningún tipo por nuestra parte sobre los intervalos que produce.
+
+Esto puede venirnos bien en algunos casos, pero no en otros.
+
+## Estableciendo el número de clases
+
+En este tema explicaremos una receta para agrupar datos. Lo dicho, ni mejor ni peor que el resto.
+
+Lo primero es establecer el número k
+de clases en las que vamos a dividir nuestros datos. Podemos decidir en función de nuestros intereses o podemos hacer uso de alguna de las reglas existentes. Destacaremos las más populares. Sea n el número total de datos de la muestra
+
+- Regla de la raíz cuadrada: k=⌈n−−√ ⌉
+
+- Regla de Sturges: k=⌈1+log2(n)⌉
+
+- Regla de Scott: Se determina primero la amplitud teórica, AS de las clases
+AS=3.5⋅s~⋅n−13
+donde s~ es la desviación típica muestral. Luego se toma
+k=⌈max(x)−min(x)AS⌉
+
+- Regla de Freedman-Diaconis: Se determina primero la amplitud teórica, AFD de las clases
+AFD=2⋅(Q0.75−Q0.25)⋅n−13
+(donde, recordemos, Q0.75−Q0.25, es el rango intercuantílico) y entonces
+k=⌈max(x)−min(x)AFD⌉
+
+Si os fijáis, las dos primeras solo dependen de n, mientras que las dos últimas también tienen en cuenta, de formas diferentes, la dispersión de los datos. De nuevo, no hay ninguna mejor que las demás. Pero sí puede ocurrir que métodos diferentes den lugar a la observación de características diferentes en los datos.
+
+## Estableciendo el número de clases con R
+
+Las instrucciones para llevar a cabo las 3 últimas reglas con R son, respectivamente,
+
+- nclass.Sturges
+- nclass.scott
+- nclass.FD
+
+Puede ocurrir que las difrentes reglas den valores diferentes, o no.
+
+## Decidiendo la amplitud
+
+Una vez determinado k, hay que decidir su amplitud.
+
+La forma más fácil y la que nosotros utilizaremos por defecto es que la amplitud de todos los intervalos sea la misma, A. Esta forma no es la única.
+
+Para calcular A, lo que haremos será dividir el rango de los datos entre k, el número de clases, y redondearemos por exceso a un valor de la precisión de la medida.
+
+Si se da el improbable caso en que el cociente de exacto, tomaremos como A
+ese cociente más una unidad de precisión.
+
+## Extremos de los intervalos
+
+Es la hora de calcular los extremos de los intervalos. Nosotros tomaremos estos intervalos siempre cerrados por su izquierda y abiertos por la derecha, debido a que esta es la forma en que R los construye y porque es así como se utilizan en Teoría de Probabilidades al definir la distribución de una variable aleatoria discreta y también en otras muchas situaciones cotidianas.
+
+Utilizaremos la siguiente notación
+[L1,L2),[L2,L3),…,[Lk,Lk+1)
+
+donde los Li denotan los extremos de los intervalos. Estos se calculan de la siguiente forma:
+
+L1=min(x)−1/2⋅precisión
+
+A partir de L1, el resto de intervalos se obtiene de forma recursiva:
+L2=L1+A
+L3=L2+A
+⋮
+Lk+1=Lk+A
+
+Si nos fijamos bien, los extremos forman una progresión aritmética de salto A
+:
+Li=L1+(i−1)A,i=2,…,k+1
+
+De esta forma garantizamos que los extremos de los intervalos nunca coincidan con valores del conjunto de datos, puesto que tinen una precisión mayor.
+
+## Marca de clase
+
+Solo nos queda determinar la marca de clase, Xi, de cada intervalo [Li,Li+1).
+
+Este no es más que un valor del intervalo que utilizaremos para identificar la clase y para calcular algunos estadísticos.
+
+Genralmente,
+Xi=Li+Li+12
+es decir, Xi será el punto medio del intervalo, para así garantizar que el error máximo cometido al describir cualquier elemento del intervalo por medio de su marca de clase sea mínimo o igual a la mitad de la amplitud del respectivo intervalo.
+
+Es sencillo concluir que, al tener todos los intervalos amplitud A, la distancia entre Xi y Xi+1 tambien será A. Por consiguiente,
+
+Xi=X1+(i−1)A,i=2,…,k
+
+donde
+X1=L1+L22
+
+
+## Ejemplo 2
+
+Vamos a considerar el conjunto de datos de datacrab. Para nuestro estudio, trabajaremos únicamente con la variable width.
+
+Llevaremos a cabo los 4 pasos explicados con anterioridad: cálculo del número de intervalos, determinación de la amplitud, cálculo de los extremos y las marcas de clase.
+
+```{r}
+crabs = read.table("../data/datacrab.txt", header = TRUE)
+str(crabs)
+
+cw = crabs$width
+```
+
+### Estableciendo el número de clases - ejercicio 2
+
+Calculemos el número de clases según las diferentes reglas que hemos visto:
+
+```{r}
+
+n = length(cw)
+
+# Regla de la raíz cuadrada:
+k1 = ceiling(sqrt(n))
+k1
+
+# Regla de Sturges
+k2 = ceiling(1+log(n,2))
+k2
+
+# Regla de Scott
+As = 3.5*sd(cw)*n^(-1/3) #Amplitud teórica
+k3 = ceiling(diff(range(cw))/As)
+k3
+
+# Regla de Freedman-Diaconis
+Afd = 2*(quantile(cw,0.75, names = FALSE)-quantile(cw,0.25,names = FALSE))*n^(-1/3) 
+k4 = ceiling(diff(range(cw))/Afd) #names = FALSE es para que quite el concepto y solo muestre el valor
+k4
+
+# Para comprobar nuestros 3 últimos resultados con R:
+nclass.Sturges(cw)
+nclass.scott(cw)
+nclass.FD(cw)
+
+# De momento, vamos a seguir la Regla de Scott ya que es la que esta en el medio de todas. Es decir, vamos a considerar 10 intervalos. 
+
+```
+
+### Estableciendo la amplitud de los intervalos - ejercicio 2
+
+```{r}
+A = diff(range(cw)) / k3 # k3 lo obtuvimos Utilizando el metodo de scott
+A
+
+A = 1.3 # Como nuestros datos (el width de los cangrejos) están expresados en mm con una precisión de una cifra decimal, debemos redondear por exceso a un cifra decimal el resultado obtenido. Por lo tanto, nuestra amplitud será de
+
+# Recordad que si el cociente nos hubiera dado un valor exacto con respecto a la precisión, tendríamos que haberle sumado una unidad de precisión.
+
+```
+
+### Estableciendo los Extremos de los intervalos - ejercicio 2
+```{r}
+
+precision = k3/100
+
+L1 = min(cw)-(0.5 * precision) # El intervalo minimo
+L1
+
+#Recuerda que los intervalos seran abiertos a la izquierda y cerrados a la derecha, osea el intervalor 1-3 incluye el 1 pero no el 3
+
+# Y, el resto de extremos se calculan del siguiente modo:
+
+L2 = L1 + A 
+L3 = L2 + A
+L4 = L3 + A
+L5 = L4 + A
+L6 = L5 + A
+L7 = L6 + A
+L8 = L7 + A
+L9 = L8 + A
+L10 = L9 + A
+L11 = L10 + A
+L = c(L1,L2,L3,L4,L5,L6,L7,L8,L9,L10,L11)
+L
+
+#O bien, si queremos facilitarnos el trabajo, también los podemos calcular mucho más rápido del siguiente modo:
+
+L = L1 + A*(0:10)
+L
+
+```
+
+### Estableciendo las marcas de las clases - ejercicio 2
+```{r}
+
+# Empecemos calculando X1 (la primera marca)
+X1 = (L[1]+L[2])/2
+X1
+
+#Y, el resto de marcas de clase se calculan del siguiente modo:
+X = X1 + A*(0:9)
+X
+
+#o también puedes hacerlo de esta manera
+X = (L[1:length(L)-1]+L[2:length(L)])/2
+X
+
+
+```
+

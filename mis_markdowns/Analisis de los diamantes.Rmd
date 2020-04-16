@@ -1,0 +1,32 @@
+---
+title: "Analisis de los diamantes"
+author: "Moises"
+date: "28/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#library(reticulate)
+#py_install("pandas")
+#py_install("matplotlib")
+
+```
+
+
+# Análisis de los diamantes
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib
+#from ggplot2 import diamonds
+
+#matplotlib.style.use("ggplot2")
+
+print(diamonds.shape)
+print(diamonds.head(10))
+```

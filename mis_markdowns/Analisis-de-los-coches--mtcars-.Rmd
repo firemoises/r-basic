@@ -1,0 +1,30 @@
+---
+title: "Analisis de los coches (mtcars)"
+author: "Moises"
+date: "28/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(reticulate)
+```
+
+## Análisis de los coches (mtcars)
+
+### Carga de datos
+```{python}
+from ggplot import mtcars
+data = mtcars
+data.index = data["name"]
+print(data.head())
+```
+
+
+### Medidas de centralización
+```{python}
+print(data.mean()) # Media por columnas
+print(data.mean(axis = 1)) # Media por filas
+print(data.median())
+print(mtcars.mode())
+```

@@ -1,0 +1,17 @@
+---
+title: "Listado-funciones-importantes"
+author: "Moises"
+date: "27/3/2020"
+output: html_document
+---
+
+```{r}
+
+#Para buscar el primer registro que tenga X valor
+df$columna[match("valor_del_registro_abuscar",df$columna)]
+
+#Para buscar todos los registros que tengan X valor
+df$columna[which(df$columna == "valor_del_registro_abuscar")]
+
+```
+

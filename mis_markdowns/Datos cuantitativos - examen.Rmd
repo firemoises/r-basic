@@ -1,0 +1,82 @@
+---
+title: "Datos cuantitativos - examen"
+author: "Moises"
+date: "5/3/2020"
+output: html_document
+---
+
+```{r}
+
+df = read.table("../data/grades.txt") 
+
+```
+
+1 Calcula la media, la mediana y la moda redondeada a dos cifras decimales de las notas numéricas de los exámenes tanto de forma conjunta como por estudio universitario. ¿En qué grupo observamos la nota más alta? ¿Qué grupo está por encima de la media de estudiantes?
+
+```{r}
+
+df$nota = round(df$nota,2)
+medias_por_estudio = aggregate(nota~estudio, data = df, FUN = mean)
+medias_por_estudio
+
+medianas_por_estudio = aggregate(nota~estudio, data = df, FUN = median)
+medianas_por_estudio
+
+detecta_moda = function(x){
+  as.numeric(names(which(table(round(x,2))==max(table(round(x,2))))))
+}
+
+moda_por_estudio = aggregate(df$nota~df$estudio, FUN = detecta_moda)
+moda_por_estudio
+
+medias_por_conjunto = mean(df$nota)
+medias_por_conjunto
+
+medianas_por_conjunto = median(df$nota)
+medianas_por_estudio
+
+moda_por_conjunto = as.numeric(names(which(table(round(df$nota,2))==max(table(round(df$nota,2))))))
+moda_por_conjunto
+
+
+nota_mas_alta_por_estudio = aggregate(nota~estudio, data = df, FUN = max)
+nota_mas_alta_por_estudio
+
+```
+
+Se puede ver que la materia donde los estudiantes suelen tener mayor puntuacion es en Mates PERO la materia donde un estudiante obtuvo la nota mas alta fue en Industrial
+
+2.¿En qué grupo observamos más variación de notas? Justifica tu respuesta
+```{r}
+
+dispersion_por_estudio = aggregate(nota~estudio, data = df, FUN = sd)
+dispersion_por_estudio
+
+```
+
+Se puede ver que la materia donde hay mas dispersion es en Mates, al calcular la desviacion tipica en cada estudio
+
+3.¿Hay mucha diferencia entre el grupo que has respondido en el ejercicio 1 y en el ejercicio 2? Intenta dar una explicación objetiva del suceso
+
+Es el mismo grupo, el grupo de las Mates
+
+4. Dibuja en un único gráfico los cuatro diagramas de caja, uno para cada grupo. Añade así mismo la nota media, pon nombre, título y color al gráfico para documentar el gráfico correctamente.
+```{r}
+
+boxplot(nota~estudio, data = df, ylab = "Notas por estudio")
+medias_por_estudio = aggregate(nota~estudio, data = df, FUN = mean)
+points(medias_por_estudio, col = "pink", pch = 15)
+
+```
+
+5. ¿Observas algunos valores atípicos en el boxplot anterior? ¿A qué grupo pertence? 
+
+Si, pertencen al grupo de industrial, informatica y telematica
+
+6. Indica a partir del boxplot anterior en qué grupo observamos más variedad de notas.
+
+Podemos ver que en coherencia con lo respondido en la segunda pregunta, el grupo con variedad de notas es Mates
+
+7. En base a todo lo anterior, ¿puedes afirmar de forma estadística que el examen de carrera ha ido mejor en algún estudio que en los demás? 
+
+Teniendo en cuenta que el criterio sea que tan bien le fue a los estuadiantes en la mayoria de las materias, podemos decir que el grupo de informatica es el que obtuvo mejores resultados ya que es el grupo que tiene mejor balance entre buenas calificaciones y baja dispersion, en Mates estuvieron los mejores resultados pero tambien hubo muchos muy bajos

@@ -1,0 +1,37 @@
+---
+title: "Analisis de vuelos en NYC"
+author: "Moises"
+date: "28/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(reticulate)
+```
+
+## Vuelos de NYC
+
+```{r}
+data <- nycflights13::flights #Cuando un dataset tiene muchas tablas haciendo esto puedes indicar cual tabla deseas tomar
+head(data)
+nrow(data)
+summary(data)
+```
+
+## De R a Python
+```{python}
+pydata = r.data #Tomando la data r a python
+pydata = pydata[pydata["dest"]=="ORD"] #fIltrando solo los vuelos con destino a Orlando
+pydata = pydata[['carrier', 'dep_delay', 'arr_delay', 'origin']] #Filtrando columnas
+pydata = pydata[pydata['arr_delay']<6*60] 
+# Como hay muchos valores outlayers(fuera de lo comun) Vamos poner solo los retrasos menores a 6 horas, para normalizar mas la data
+pydata = pydata.dropna() #Eliminando NaNs
+print(pydata.head())
+print(pydata.shape)
+```
+
+```{r}
+summary(py$pydata) #Aqui hago el mismo summary que hice anteriormente PERO con la info que viene de Python
+boxplot(arr_delay~origin, data = py$pydata, main = "Retraso de los vuelo hacia Orlando desde NYC")
+```

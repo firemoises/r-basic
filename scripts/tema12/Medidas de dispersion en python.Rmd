@@ -1,0 +1,21 @@
+---
+title: "Coches"
+author: "Curso de Estadística Descriptiva"
+date: "9/1/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+```
+
+## Análisis de los coches (mtcars)
+
+### Carga de datos
+```{python}
+import pandas as pd #lo primero es llamar a pandas
+import numpy as np
+data = pd.read_csv("../r-basic/data/mtcars.csv")
+data.index = data["name"]
+print(data.head())
+```

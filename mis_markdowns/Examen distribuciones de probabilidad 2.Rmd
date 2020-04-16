@@ -1,0 +1,159 @@
+---
+title: "Examen distribuciones de probabilidad 2"
+author: "Moises"
+date: "24/3/2020"
+output: html_document
+---
+
+1- En una universidad, se sabe que el 25% de los alumnos realizan algún tipo de deporte. Se ha obtenido una muestra de 30 alumnos.
+
+a) Si llamamos X a la variable aleatoria que cuenta el número de alumnos que realizan algún tipo de deporte, ¿qué tipo de distribución sigue X?
+
+b) ¿Qué esperanza tiene X?
+
+c) ¿Y varianza?
+
+d) Calcula con R (o Python) la probabilidad de que más de 25 alumnos practiquen algún deporte.
+
+e) Calcula con R (o Python) la probabilidad de que exactamente 15 alumnos practiquen algún deporte.
+
+f) Calcula con R (o Python) la probabilidad de que de 10 alumnos o menos practiquen algún deporte.
+
+```{r }
+library(Rlab)
+
+M = 8 #cuartil 25% estudiantes que practican un deporte
+N = 22 #Resto de estudiantes
+K = 30 #Cantidad de alumnos que sacare
+X1 = 25 #Cantidad a medir 1
+X2 = 15 #Cantidad a medir 2
+X3 = 10 #Cantidad a medir 3
+
+prob1 = (1 - phyper(X1,m = M, n = N, k = K)) *100
+
+prob2 = dhyper(X2,m = M, n = N, k = K) *100
+
+prob3 = phyper(X3,m = M, n = N, k = K) *100
+
+
+```
+
+
+RESPUESTAS PREGUNTA 1
+
+a) x sigue una distribucion hipergeometrica
+
+b) 
+
+c)
+
+d) La probabilidad de que más de 25 alumnos practiquen algún deporte es `r prob1`%
+
+e) La probabilidad de que exactamente 15 alumnos practiquen algún deporte es `r prob2`%
+
+f) La probabilidad de que de 10 alumnos o menos practiquen algún deporte es `r prob3`%
+
+
+2- El número medio de accidentes de coche en la ciudad de Mahón en 2 meses es de 2 accidentes. 
+
+a) ¿Qué distribución sigue la v.a. que cuenta el número de accidentes en 2 meses?
+
+b) Calcula la esperanza
+
+c) Calcula con R (o Python) la probabilidad de que no ocurra ningún accidente en 2 meses.
+
+```{r }
+
+cant_accidentes = 0
+media_accidentes = 2
+
+probabilidad_cant_accidentes = round((dpois(x = cant_accidentes, lambda = media_accidentes)) *100,2)
+
+```
+
+RESPUESTAS PREGUNTA 2
+
+a) Sigue una distribucion de poisson
+
+b) 
+
+c) La probabilidad de que ocurran 0 accidentes en 2 meses es `r probabilidad_cant_accidentes`
+
+
+3-El 40% de un pueblo a las afueras de la ciudad de Pensilvania ve un concurso que dan por la tele. El concurso llama por teléfono a 15 personas del pueblo elegidas al azar. ¿De qué distribución se trata?
+
+RESPUESTAS PREGUNTA 3
+
+Se trata de una distribucion Hipergeometrica
+
+
+4- En un bol muy grande tenemos, en total, 70 fresas, de entre las cuales 10 están podridas. Tomando un puñado de 20 fresas al azar y sin reemplazar ninguna de ellas, ¿qué distribución sigue la v.a. que cuenta el número de fresas podridas?
+
+Da también la esperanza y la varianza de esta variable aleatoria.
+
+RESPUESTAS PREGUNTA 4
+
+Se trata de una distribucion Hipergeometrica
+
+5- Un test de matemáticas consta de 200 preguntas de verdadero o falso. Para una persona que respondiese al azar, ¿qué distribución seguiría la v.a. que cuenta el número de preguntas acertadas?
+
+Da también la esperanza y la varianza de esta variable aleatoria.
+
+RESPUESTAS PREGUNTA 5
+
+Se trata de una distribucion binomial
+
+6- Un test de matemáticas consta de 200 preguntas. Cada pregunta consta de 4 posibles respuestas con solo una correcta. Para una persona que respondiese al azar, ¿qué distribución seguiría la v.a. que cuenta el número de preguntas acertadas?
+
+Da también la esperanza y la varianza de esta variable aleatoria.
+
+RESPUESTAS PREGUNTA 6
+
+Se trata de una distribucion binomial
+
+7- Un test de matemáticas consta de 200 preguntas de verdadero o falso. Para una persona que respondiese al azar y por orden, ¿qué distribución seguiría la v.a. que cuenta el número de preguntas respondidas hasta el primer acierto?
+
+Da también la esperanza y la varianza de esta variable aleatoria.
+
+RESPUESTAS PREGUNTA 7
+
+Se trata de una distribucion binomial y la distrbucion geometrica cuenta el número de preguntas respondidas hasta el primer acierto
+
+
+8- Para evitar ser arrestado al pasar el control de seguridad, un viajero ha colocado 7 pastillas de droga en una botella que contiene 14 píldoras de vitaminas, las cuales son muy similares a las otras. Si el policía de turno selecciona 4 pastillas aleatoriamente para analizarlas, ¿qué distribución sigue la v.a. que cuenta el número de pastillas de droga?
+
+RESPUESTAS PREGUNTA 8
+
+Se trata de una distribucion geometrica
+
+
+9- Un servicio dedicado a la reparación de aires acondicionados recibe de media 27 llamadas diarias. ¿Qué distribución sigue la v.a. que cuenta el número de llamadas diarias?
+
+RESPUESTAS PREGUNTA 9
+
+Se trata de una distribucion de Poisson
+
+
+10- Se lanza 53 veces un dado. ¿Qué distribución sigue la v.a. que cuenta cuántas veces ha salido un número impar? ¿Y la v.a. que cuenta el número de veces que ha salido un número par? ¿Y la v.a. que cuenta las veces que hemos obtenido exactamente el número "5"?
+
+RESPUESTAS PREGUNTA 10
+- Que cuenta cuántas veces ha salido un número impar? La distribucion binomial
+- ¿Y la v.a. que cuenta el número de veces que ha salido un número par? La distribucion binomial
+- ¿Y la v.a. que cuenta las veces que hemos obtenido exactamente el número "5"? La distribucion binomial negativa
+
+11- El precio medio del litro de gasolina durante el próximo año se estima que puede oscilar entre 1.09€ y 2.53€. ¿De qué distribución de probabilidad se trata?
+
+Da la esperanza
+
+RESPUESTAS PREGUNTA 11
+
+Se trata de una distribucion normal
+
+12- En una tienda del centro comercial, el tiempo medio de cola para poder pagar en caja es de 7 minutos. ¿De qué distribución de probabilidad se trata?
+
+Da la esperanza y varianza
+
+RESPUESTAS PREGUNTA 12
+
+Se trata de una distribucion uniforme
+

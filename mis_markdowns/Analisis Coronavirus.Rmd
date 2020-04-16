@@ -1,0 +1,159 @@
+---
+title: "Analisis Coronavirus"
+author: "Moises"
+date: "27/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, cache = TRUE)
+```
+
+
+```{r, echo=FALSE, message = FALSE, comment=NA ,cache=TRUE}
+
+### WRANGLING LA DATA DE population_by_country_2020.xlsx
+
+library("readxl")
+library("tidyverse")
+
+df_population = read_excel("../data/population_by_country_2020.xlsx") 
+
+por1000 = function(x){x*1000}
+
+df_population = aggregate(population~country,data=df_population,FUN=por1000) 
+
+countries = str_replace(df_population$country, " ", "_")
+countries = str_replace(countries, " ", "_") #Hay que hacerlo 2 veces por los paises que tienen mas de una palabra
+
+df_population$country = countries
+
+
+```
+
+
+```{r, echo=FALSE, message = FALSE, comment=NA,cache=TRUE}
+
+### WRANGLING LA DATA DE coronavirus-DF
+
+df = read.csv("../data/population_by_country_27_3_2020.csv") 
+
+#Vamos a agregarle ahora la columna de population y si el nombre es muy largo se lo vamos a cambiar
+
+df$countriesAndTerritories = as.character(df$countriesAndTerritories)
+df$countryterritoryCode = as.character(df$countryterritoryCode)
+df_population$df_population = as.character(df_population$country)
+
+count=0
+for(n in df$countriesAndTerritories){
+
+count = count + 1
+
+count2=0
+  for(n2 in df_population$country){
+  
+    count2 = count2 + 1
+    
+    if(as.character(n) == as.character(n2)){df$population[count] = df_population$population[count2] }
+
+ if(nchar(n) > 8){df$countriesAndTerritories[count] = df$countryterritoryCode[count] }
+    
+ }
+
+}
+
+
+###### Los volvemos a convertir en factores
+
+df$countriesAndTerritories = as.factor(df$countriesAndTerritories)
+df$countryterritoryCode = as.factor(df$countryterritoryCode)
+df_population$df_population = as.factor(df_population$country)
+
+
+
+
+
+```
+
+
+
+
+```{r, echo=FALSE, message = FALSE, comment=NA}
+
+#str(df)
+#head(df)
+
+country1 = "Dominican_Republic"
+country2 = "China"
+
+#filtro_country = countriesAndTerritories == country2 & cases > 0
+
+library(ggplot2)
+
+paleta_colores = c("steelblue","#f84d28","#5ef828","#28f8e2","#284bf8","#e528f8","#f82851","#eff828","#673197","#b66363")
+
+sacar_proporcion = function(total,muestra){
+ifelse(total > 300000, (muestra*100)/total, 0)
+  #Solo los paises con mas de 300,000 habitantes
+}
+
+### PAISES CON MAYOR CANTIDAD DE CASOS
+
+sums_cases = aggregate(cases~countriesAndTerritories,data=df,FUN=sum, na.rm=TRUE) 
+sums_cases = sums_cases[order(sums_cases$cases,decreasing = TRUE),] 
+sums_cases = head(sums_cases,10)
+sums_cases = sums_cases[order(sums_cases$cases,decreasing = FALSE),] 
+
+ggplot(sums_cases, aes(x=countriesAndTerritories, y=cases)) + ggtitle("Paises con mayor cantidad de casos") + geom_bar(stat="identity", fill=paleta_colores) + 
+  labs(x="Paises", y="Casos")
+
+
+### PAISES CON MAYOR CANTIDAD DE MUERTES
+
+sums_deaths = aggregate(deaths~countriesAndTerritories,data=df,FUN=sum, na.rm=TRUE) 
+sums_deaths = sums_deaths[order(sums_deaths$deaths,decreasing = TRUE),] 
+sums_deaths = head(sums_deaths,10)
+sums_deaths = sums_deaths[order(sums_deaths$deaths,decreasing = FALSE),] 
+
+ggplot(sums_deaths, aes(x=countriesAndTerritories, y=deaths)) + ggtitle("Paises con mayor cantidad de muertes") + geom_bar(stat="identity", fill=paleta_colores) + 
+  labs(x="Paises", y="Muertes")
+
+
+### PAISES CON MAYOR CANTIDAD DE CASOS - En proporcion a la cantidad de habitantes
+
+df$proporcion_casos = 0
+df$proporcion_casos = sacar_proporcion(df$population,df$cases)
+
+sums_cases_prop = aggregate(proporcion_casos~countriesAndTerritories,data=df,FUN=sum, na.rm=TRUE) 
+sums_cases_prop = sums_cases_prop[order(sums_cases_prop$proporcion_casos,decreasing = TRUE),] 
+sums_cases_prop = head(sums_cases_prop,10)
+sums_cases_prop = sums_cases_prop[order(sums_cases_prop$proporcion_casos,decreasing = FALSE),]
+
+sums_cases_prop$proporcion_casos = round(sums_cases_prop$proporcion_casos * 100,2)
+
+ggplot(sums_cases_prop, aes(x=countriesAndTerritories, y=proporcion_casos)) +
+ggtitle("Paises con mayor cantidad de casos segun proporcion poblacional") + geom_bar(stat="identity", fill=paleta_colores) + 
+  labs(x="Paises", y="Casos por proporcion poblacional")
+
+
+
+### PAISES CON MAYOR CANTIDAD DE MUERTES - En proporcion a la cantidad de habitantes
+
+df$proporcion_muertes = 0
+df$proporcion_muertes = sacar_proporcion(df$population,df$deaths)
+
+sums_muertes_prop = aggregate(proporcion_muertes~countriesAndTerritories,data=df,FUN=sum, na.rm=TRUE) 
+sums_muertes_prop = sums_muertes_prop[order(sums_muertes_prop$proporcion_muertes,decreasing = TRUE),] 
+sums_muertes_prop = head(sums_muertes_prop,10)
+sums_muertes_prop = sums_muertes_prop[order(sums_muertes_prop$proporcion_muertes,decreasing = FALSE),]
+
+sums_muertes_prop$proporcion_muertes = round(sums_muertes_prop$proporcion_muertes * 100,2)
+
+ggplot(sums_muertes_prop, aes(x=countriesAndTerritories, y=proporcion_muertes)) +
+ggtitle("Paises con mayor cantidad de muertes segun proporcion poblacional") + geom_bar(stat="identity", fill=paleta_colores) + 
+  labs(x="Paises", y="Casos por proporcion poblacional")
+
+```
+
+
+

@@ -1,0 +1,543 @@
+---
+title: "Introducción a distribuciones de probabilidad"
+author: "Moises"
+date: "20/3/2020"
+output: html_document
+---
+## Conceptos básicos
+Experimento aleatorio
+
+Experimento aleatorio. Experimento que efectuado en las mismas condiciones puede dar lugar a resultados diferentes
+
+Suceso elemental. Cada uno de los posibles resultados del experimento aleatorio
+
+Espacio muestral. Conjunto Ω
+formado por todos los sucesos elementales del experimento aleatorio
+
+## Ejemplo
+
+Lanzar una moneda es un experimento aleatorio
+
+Los sucesos elementales son: sacar cara (C) y sacar cruz (+)
+
+El espacio muestral de este experimento aleatorio es Ω={C,+}
+
+## Sucesos
+
+Suceso. Subconjunto del espacio muestral
+
+Suceso total o seguro. Ω
+
+Suceso vacío o imposible. ∅
+
+## Ejemplo
+
+Lanzar un dado es un experimento aleatorio
+
+Algunos sucesos podrían ser: sacar número par ({2,4,6}), sacar mayor que 4 ({5,6}), sacar número múltiplo de 3 ({3,6})…
+
+El suceso total de este experimento aleatorio es Ω={1,2,3,4,5,6}
+
+Un ejemplo de suceso imposible de este experimento aleatorio es ∅={7}
+(sacar 7)
+
+## Sucesos
+
+Operaciones con sucesos. Sean A,B⊆Ω sucesos. Entonces, A∪B es el suceso unión (resultados pertenecen a A, o a B, o a ambos) A∩B es el suceso intersección (resultados pertenecen a A y B ) Ac es el suceso complementario (resultados que no pertenecen a A)
+A−B=A∩Bc
+es el suceso diferencia (resultados que pertenecen a A pero no a B)
+
+Sucesos incompatibles. Si A∩B=∅
+
+## Probabilidad
+
+Probabilidad de un suceso. Número entre 0 y 1 (ambos incluidos) que mide la expectativa de que se dé este suceso
+
+## Ejemplo
+
+- La probabilidad de sacar un 6 al lanzar un dado estándar no trucado es 16
+- La probabilidad de sacar un 6 al lanzar un dado de 4 caras es 0
+- La probabilidad de sacar un 6 al lanzar un dado de 20 caras es 120
+
+## Probabilidad
+
+Probabilidad. Sea Ω
+el espacio muestral de un experimento aleatorio. Suponiendo que Ω es finito, una probabilidad sobre Ω es una aplicación 
+
+que satisface 
+
+0≤p(A)≤1 ∀A∈P(Ω)
+p(Ω)=1
+Si {A1,…,An}
+son sucesos incompatibles dos a dos (Ai∩Aj=∅ ∀i≠j), entonces
+p(A1∪⋯∪An)=p(A1)+⋯+p(An)
+
+Notación: Si a∈Ω, escribiremos p(a) en vez de p({a})
+
+
+## Variable aleatoria
+
+Variable aleatoria. Una variable aleatoria (v.a.) sobre Ω
+es una aplicación X:Ω⟶R que asigna a cada suceso elemental ω un número real X(ω)
+
+Puede entenderse como una descripción numérica de los resultados de un experimento aleatorio
+
+Dominio de una variable aleatoria. DX, es el conjunto de los valores que puede tomar
+
+## Función de distribución
+
+Función de distribución de la v.a. X. Es una función
+F:R⟶[0,1]
+definida por F(x)=p(X≤x)
+
+Sea F una función de distribución de una v.a. X y digamos
+F(a−)=limx→a−F(x)
+p(X≤a)=F(a)
+p(X<a)=limb→a, b<ap(X≤b)=limb→a, b<aF(b)=F(a−)
+p(X=a)=p(X≤a)−p(X<a)=F(a)−F(a−)
+p(a≤X≤b)=p(X≤b)−p(X<a)=F(b)−F(a−)
+
+## Cuantiles
+
+Cuantil de orden p de una v.a. X. Es el xp∈R más pequeño tal que F(xp)≥p
+
+Nótese que la mediana es el cuantil de orden 0.5
+
+## Variable aleatoria discreta
+
+Variable aleatoria discreta. Una v.a. X:Ω⟶R es discreta cuando DX es finito o un subconjunto de N
+
+Función de probabilidad. Es la función f:R⟶[0,1] definida por
+f(x)=p(X=x)
+
+Nótese que f(x)=0 si x∉DX. Por tanto, interpretaremos la función de probabilidad como la función
+f:DX⟶[0,1]
+
+## Esperanza
+
+Esperanza de una v.a. discreta. Sea f:DX⟶[0,1] la función de probabilidad de X, entonces la esperanza respecto de la función de probabilidad es la suma ponderada de los elementos de DX, multiplicando cada elemento x de DX por su probabilidad, E(X)=∑x∈DXx⋅f(x)
+
+Si g:DX⟶R es una aplicación E(g(X))=∑x∈DXg(x)⋅f(x)
+
+## Varianza
+
+Varianza de una v.a. discreta. Sea f:DX⟶[0,1]
+la función de probabilidad de X, entonces la varianza respecto de la función de probabilidad es el valor esperado de la diferencia al cuadrado entre X y su valor medio 
+E(X), Var(X)=E((X−E(X))2)
+
+La varianza mide como de variados son los resultados de X respecto de la media
+
+## Desviación típica
+
+Desviación típica de una v.a. discreta. Sea f:DX⟶[0,1]
+la función de probabilidad de X, entonces la desviación típica respecto de la función de probabilidad es
+
+σ(X)=Var(X)−−−−−−√
+
+Las unidades de la varianza son las de X al cuadrado. En cambio, las de la desviación típica son las mismas unidades que las de X
+
+## Distribución de probabilidad
+
+Distribución de probabilidad. En teoría de la probabilidad y estadística, la distribución de probabilidad de una variable aleatoria es una función que asigna a cada suceso definido sobre la variable la probabilidad de que dicho suceso ocurra.
+
+## Distribuciones en R
+
+Dada cualquier variable aleatoria, va, R nos da cuatro funciones para poder trabajar con ellas:
+
+- dva(x,...): Función de densidad o de probabilidad f(x) de la variable aleatoria para el valor x del dominio de definición.
+- pva(x,...): Función de distribución F(x) de la variable aleatoria para el valor x
+del dominio de definición.
+- qva(p,...): Cuantil p-ésimo de la variable aleatoria (el valor de x más pequeño tal que F(x)≥p).
+- rva(n,...): Generador de n
+observaciones siguiendo la distribución de la variable aleatoria.
+
+
+## Distribuciones discretas más conocidas
+- Bernoulli
+- Binomial
+- Geométrica
+- Hipergeométrica
+- Poisson
+- Binomial Negativa
+
+## Distribución de Bernoulli
+
+Si X es variable aleatoria que mide el "número de éxitos" y se realiza un único experimento con dos posibles resultados (éxito, que toma valor 1, o fracaso, que toma valor 0), diremos que X se distribuye como una Bernoulli con parámetro p
+
+X∼Be(p) donde p es la probabilidad de éxito y q=1−p es la probabilidad de fracaso.
+
+- El dominio de X será DX={0,1}
+
+La función de probabilidad vendrá dada por f(k)=pk(1−p)1−k=⎧⎩⎨⎪⎪p1−p0si k=1si k=0en cualquier otro caso
+
+La función de distribución vendrá dada por F(x)=⎧⎩⎨⎪⎪01−p1si x<0si 0≤x<1si x≥1
+Esperanza E(X)=p Varianza Var(X)=pq
+
+
+## El código de la distribución de Beroulli:
+
+- En R tenemos las funciones del paquete Rlab: dbenr(x,prob), pbenr(q,prob), qbenr(p,prob), rbenr(n, prob) donde prob es la probabilidad de éxito.
+- En Python tenemos las funciones del paquete scipy.stats.bernoulli: pmf(k,p), cdf(k,p), ppf(q,p), rvs(p, size) donde p es la probabilidad de éxito.
+
+
+## Función de densidad
+Sea $X = Be(p=0.7)$, la distribución que modela la probabilidad de obtener una cara usando una moneda trucada. 
+
+$$f(k) = p^k(1-p)^{1-p},\ k\in \{0,1\}$$
+
+## En R
+
+
+```{r}
+library(Rlab)
+dbern(0, prob= 0.7) #La probabilidad de que salga 0
+dbern(1, prob = 0.7) #La probabilidad de que salga 1
+pbern(0, prob = 0.7) #La probabilidad de que salga 0
+pbern(1, prob = 0.7) #La probabilidad de que salga 1
+qbern(0.5, prob = 0.7) #La mediana osea el cuantil 0.5 osea el 51% de los casos
+qbern(0.25, prob = 0.7) #El cuantil 0.25 osea el 25% de los casos
+rbern(100, prob = 0.7) -> data #Para generar n numeros aletarios con x propabilidad 0 1
+hist(data)
+```
+
+
+
+
+## Distribución Binomial
+
+Si X es variable aleatoria que mide el "número de éxitos" y se realizan n ensayos de Bernoulli independientes entre sí, diremos que X se distribuye como una Binomial con parámetros n y p
+
+X∼B(n,p)
+
+donde p es la probabilidad de éxito y q=1−p
+
+es la probabilidad de fracaso
+
+- El dominio de X será DX={0,1,2,…,n}
+- La función de probabilidad vendrá dada por f(k)=(nk)pk(1−p)n−k
+- La función de distribución vendrá dada por F(x)=⎧⎩⎨⎪⎪0∑xk=0f(k)1si x<0si 0≤x<nsi x≥n
+- Esperanza E(X)=np
+- Varianza Var(X)=npq
+
+Atención. Fijaos que la distribución de Bernoulli es un caso particular de la Binomial. Basta tomar n=1
+y tendremos que X∼Be(p) y X∼B(1,p) son equivalentes.
+
+## El código de la distribución Binomial:
+- En R tenemos las funciones del paquete Rlab: dbinom(x, size, prob), pbinom(q,size, prob), qbinom(p, size, prob), rbinom(n, size, prob) donde prob es la probabilidad de éxito y size el número de ensayos del experimento.
+- En Python tenemos las funciones del paquete scipy.stats.binom: pmf(k,n,p), cdf(k,n,p), ppf(q,n,p), rvs(n, p, size) donde p es la probabilidad de éxito y n el número de ensayos del experimento.
+
+```{r}
+
+#Basicamente la distribucion binomial mide cual es la probabilidad de tener multiples exitos al realizar una bernoulli varias veces
+
+dbinom(13, 30, 0.5)# Si desearamos conocer cual es el porcentaje de obtener 13 caras si lanzamos una moneda 30, aqui podemos ver que es de un 11.15%
+
+#Ahora si desearamos conocer la probabilidad de multiples resultados a la vez y tambien conocer cuales son los resultados mas probables, podemos hacer lo siguiente
+
+probabilidad = 0.5 #Seguimos con el ejemplo de la moneda
+numero_intentos = 1000 #Pero ahora lanzando la moneda 1000 veces
+posibles_resultados = c(0:numero_intentos) #Vamos a medir que tan probable es al lanzar la moneda 1000 veces salga cara 0 veces, 1 veces, 2 veces, etc. 
+
+funcion_densidad = dbinom(posibles_resultados, numero_intentos, probabilidad)
+plot(posibles_resultados,funcion_densidad) #Aqui podemos ver que lo mas probable es que con una proabilidad del 50% de exito si realizamos 1000 intentos, lo mas probable es que tenga entre 450 a 550 exitos (Aunque estamos hablando de apenas un 2% de esta probabilidad)
+
+####################
+
+funcion_prob_acum = pbinom(posibles_resultados, numero_intentos, probabilidad) #Esta seria la funcion de probabilidad acumulada
+plot(posibles_resultados,funcion_prob_acum) #Aqui sin duda podemos ver que lo mas probable es que tengamos 500 o mas exitos, y de hecho hay casi un 100% de probabilidades de que tengamos 600 o mas exitos
+
+###############
+
+qbinom(0.5, numero_intentos, probabilidad) #Para obtener los cuantiles, aqui esta la mediana
+
+qbinom(0.25, numero_intentos, probabilidad) #Aqui esta el cuantil 25%
+
+############
+
+numero_experimentos = 100
+tiradas_prueba = rbinom(numero_experimentos, numero_intentos, probabilidad) #Aqui haciendo este experimento (de ver cuantas veces sale cara) pero 100 veces
+
+hist(tiradas_prueba) #Aqui podemos ver que en la gran mayoria de veces saque entre 490 a 520 caras, de hecho en unas 63 ocasiones de 100 saque entre 490 a 520 caras
+
+```
+
+## Distribución Geométrica
+
+Si X es variable aleatoria que mide el "número de repeticiones independientes del experimento hasta haber conseguido éxito", diremos que X se distribuye como una Geométrica con parámetro p
+
+X∼Ge(p) donde p es la probabilidad de éxito y q=1−p
+
+es la probabilidad de fracaso
+
+- El dominio de X será DX={0,1,2,…} o bien DX={1,2,…} en función de si empieza en 0 o en 1, respectivamente
+
+- La función de probabilidad vendrá dada por
+f(k)=(1−p)kp si empieza en 0
+f(k)=(1−p)k−1p si empieza en 1
+
+- La función de distribución vendrá dada por
+F(x)={01−(1−p)k+1si x<0si k≤x<k+1, k∈N
+
+- Esperanza E(X)=1−pp si empieza en 0 y E(X)=1p si empieza en 1
+
+- Varianza Var(X)=1−pp2
+
+- Propiedad de la falta de memoria. Si X es una v.a. Ge(p), entonces, 
+p{X≥m+n: X≥n}=p{X≥m} ∀m,n=0,1,…
+
+## Distribución Geométrica
+
+El código de la distribución Geométrica:
+
+- En R tenemos las funciones del paquete Rlab: dgeom(x, prob), pgeom(q, prob), qgeom(p, prob), rgeom(n, prob) donde prob es la probabilidad de éxito del experimento.
+- En Python tenemos las funciones del paquete scipy.stats.geom: pmf(k,p), cdf(k,p), ppf(q,p), rvs(p, size) donde p es la probabilidad de éxito del experimento.
+
+```{r}
+library(Rlab)
+
+#Basicamente la distribucion geometrica mide cual es la probabilidad de tener exito la primera vez luego de un numero n de multiples ensayos
+
+#Imaginemos que un borracho llega a su casa y en su llavero hay 10 llaves, asi que para entrar intenta una al azar y luego se le cae. Vamos a medir cual es la probabilidad de que tenga exito al entrar a su casa al tercer intento o antes
+
+p = 0.10 #Probabilidad de entrar la llave
+numero_intentos = 2
+
+probabilidad_geom_acum = pgeom(numero_intentos, p)*100 #pgeom se utiliza para medir la probabilidad acumulada
+probabilidad_geom_acum #Hay un 27.1 porciento de que entre al tercer intento o antes
+
+#####
+
+numero_intentos = 0:20 #Si quisieramos medir lo mismo pero en momentos diferentes
+probabilidad_geom_acum = pgeom(numero_intentos, p)*100 
+
+plot(numero_intentos, probabilidad_geom_acum) #Aqui vemos como hay un 60% de que tenga exito al decimo intento o antes
+
+#########
+
+p = 0.10 
+numero_intentos = 0:20 
+
+probabilidad_geom =  dgeom(numero_intentos, p) #Ahora si quisieramos medir cual es la Probabilidad de que en 20 intentos lograramos entrar en un intento determinado 
+
+plot(numero_intentos, probabilidad_geom) #Aqui podemos ver que hay un 10% de probabilidades de que yo haya entrado a la primera PERO hay un 9% de que yo haya entrado justamente a la segunda y haya fallado las anteriores Y TAMBIEN hay 5.9% de probabilidades de que yo haya entrado justamente a la sexta vez y haya fallado las anteiores
+
+#########
+
+qgeom(0.5, p) #La mediana
+qgeom(0.75, p) #El tercer cuartil
+
+###############
+
+radom_values = rgeom(100, p) #Vamos a medir el mismo ejemplo pero ahora en 100 intentos con valores aleatorios
+
+hist(radom_values,breaks = 10) #Aqui podemos ver como en mas de la mitad de las ocasiones entre antes del decimo intento pero hubo ocasiones que intento hasta 30 o 40 veces
+```
+
+## Distribución Hipergeométrica
+
+Consideremos el experimento "extraer a la vez (o una detrás de otra, sin retornarlos) n
+objetos donde hay N de tipo A y M de tipo B". Si X es variable aleatoria que mide el "número de objetos del tipo A", diremos que X se distribuye como una Hipergeométrica con parámetros N,M,n
+
+X∼H(N,M,n)
+
+- El dominio de X será DX={0,1,2,…,N} (en general)
+
+- La función de probabilidad vendrá dada por f(k)=(Nk)(Mn−k)(N+Mn)
+
+- La función de distribución vendrá dada porF(x)=⎧⎩⎨⎪⎪0∑xk=0f(k)1si x<0si 0≤x<nsi x≥n
+- Esperanza E(X)=nNN+M
+- Varianza Var(X)=nNM(N+M)2⋅N+M−nN+M−1
+
+## Distribución Hipergeométrica
+
+El código de la distribución Hipergeométrica:
+
+- En R tenemos las funciones del paquete Rlab: dhyper(x, m, n, k), phyper(q, m, n, k), qhyper(p, m, n, k), rhyper(nn, m, n, k) donde m es el número de objetos del primer tipo, n el número de objetos del segundo tipo y k el número de extracciones realizadas.
+- En Python tenemos las funciones del paquete scipy.stats.hypergeom: pmf(k,M, n, N), cdf(k,M, n, N), ppf(q,M, n, N), rvs(M, n, N, size) donde M es el número de objetos del primer tipo, N el número de objetos del segundo tipo y n el número de extracciones realizadas.
+```{r}
+
+#La distribucion hipergeometrica sirve para medir cual es la probabilidad de obtener un conjunto de resultados de otro conjunto donde puede haber resultados mixtos
+
+#Supongamos que tenemos 20 animales, de los cuales 7 son perros. Queremos medir la probabilidad de encontrar un número determinado de perros si elegimos $k=12$ animales al azar. 
+
+library(Rlab)
+
+M = 7 #Perros
+N = 13 #Otros animales
+K = 12 #Cantidad de animales que sacare
+
+#Si quisieramos medir cuantos perros me saldran
+
+dhyper(x = 0:K, m = M, n = N, k = K) #Aqui podemos ver que hay un 0.01% de que no me salga ningun perro. Hay un 4.7% de que me salgan 2 perros. Y hay un 35% de que me salgan 4 perros. 
+
+#Tambien vemos que hay 0% de probabilidades de que salgan mas de 7 perros por obvias razones
+
+#######
+
+#Si quisieramos medir cual es la probabilidad de obtener al menos 1 perro en cada intento
+
+phyper(q = 0:K, m = M, n = N, k = K) #Aqui podemos ver que hay un 0.01% con un solo intento. 5.2% con 3 intentos. Un 98.97% con 7 intentos. Y un 100% con mas de 7 intentos por obvias razones
+
+########
+
+qhyper(p = 0.5, m = M, n = N, k = K) #Aqui la mediana
+
+#######
+
+#Si quisieramos hacer este experimento 1000 veces con numeros aleatorios
+
+rhyper(nn = 1000, m = M, n = N, k = K) -> data
+hist(data, breaks = 12) #Aqui podemos ver que haciendo este experimento 1000 veces, efectivamente lo mas probable es que salgan 4 perros en la mayoria de las ocasiones
+```
+
+
+## Distribución de Poisson
+
+Si X es variable aleatoria que mide el "número de eventos en un cierto intervalo de tiempo", diremos que X se distribuye como una Poisson con parámetro λ
+
+X∼Po(λ)
+
+donde λ representa el número de veces que se espera que ocurra el evento durante un intervalo dado 
+
+- El dominio de X será DX={0,1,2,…}
+
+- La función de probabilidad vendrá dada por f(k)=e−λλkk!
+
+- La función de distribución vendrá dada por F(x)=⎧⎩⎨⎪⎪0∑xk=0f(k)1si x<0si 0≤x<nsi x≥n
+
+- Esperanza E(X)=λ
+- Varianza Var(X)=λ
+
+
+
+##El código de la distribución de Poisson:
+
+- En R tenemos las funciones del paquete Rlab: dpois(x, lambda), ppois(q,lambda), qpois(p,lambda), rpois(n, lambda) donde lambda es el número esperado de eventos por unidad de tiempo de la distribución.
+- En Python tenemos las funciones del paquete scipy.stats.poisson: pmf(k,mu), cdf(k,mu), ppf(q,mu), rvs(M,mu) donde mu es el número esperado de eventos por unidad de tiempo de la distribución.
+
+```{r}
+
+#La distribucion de Poisson mide cual es la probabilidad de que suceda x evento, teniendo en cuenta la media de dicho evento
+
+#Por ejemplo: Supongamos que un hospital se esta estudiando los nacimientos de bebes varones. Y se sabe que en 1 semana suelen nacer 7 varones.
+
+l = 7 #Promedio de varones que nacen a la semana
+
+#Calcula cual es la probabilidad de que nazcan 3 varones en una semana
+
+cant_nacimientos_varones_amedir = 3
+
+probabilidad_varones_nacidos = dpois(x = cant_nacimientos_varones_amedir, lambda = l) 
+probabilidad_varones_nacidos #Aqui podemos ver que la probabilidad de que nazcan 3 varones en una semana es apenas un 5.2%
+
+####
+
+#Ahora digamos que queremos medir diferentes cantidades de nacimientos, en este caso 10
+
+cant_nacimientos_varones_amedir = c(0:10)
+
+probabilidad_varones_nacidos = dpois(x = cant_nacimientos_varones_amedir, lambda = l) 
+
+plot(cant_varones_nacidos,probabilidad_varones_nacidos) #Aqui podemos ver como por ejemplo hay un 10% de probabilidades de que nazcan 9 varones en 1 semana o que hay un 13% de probabilidades de que nazcan 5 varones en 1 semana
+
+####
+
+#Ahora digamos que queremos medir la proabilidad de que al menos nazca 1 varon a la semana
+
+cant_nacimientos_varones_amedir = c(0:10)
+
+probabilidad_varones_nacidos_acum = ppois(cant_varones_nacidos, lambda = l) 
+
+plot(cant_varones_nacidos,probabilidad_varones_nacidos_acum) #Aqui podemos ver de que hay al menos un 40% de prob de que nazcan 6 varones
+
+####
+
+cant_nacimientos_varones_amedir = 7
+
+qpois(0.5, cant_nacimientos_varones_amedir) #La mediana
+
+####
+
+#Digamos que queremos hacer el mismo experimento 1000 veces
+
+cant_experimento = 1000
+cant_nacimientos_varones_amedir = c(0:10)
+
+rpois(cant_experimento, lambda = l) -> data
+
+hist(data, breaks=10) #Aqui vemos que lo mas probable es que nazcan entre 5 y 8 bebes varones
+
+```
+
+## Distribución Binomial Negativa
+
+Si X es variable aleatoria que mide el "número de repeticiones hasta observar los r éxitos en ensayos de Bernoulli", diremos que X se distribuye como una Binomial Negativa con parámetros r y p,
+X∼BN(r,p) 
+
+donde p es la probabilidad de éxito
+
+- El dominio de X será DX={r,r+1,r+2,…} 
+- La función de probabilidad vendrá dada por f(k)=(k−1r−1)pr(1−p)k−r,k≥r
+- La función de distribución no tiene una expresión analítica.
+- Esperanza E(X)=rp
+- Varianza Var(X)=r1−pp2
+
+## El código de la distribución Binomial Negativa:
+- En R tenemos las funciones del paquete Rlab: dnbinom(x, size, prop), pnbinom(q, size, prop), qnbinom(p, size, prop), rnbinom(n, size, prop) donde size es el número de casos exitosos y prob la probabilidad del éxito.
+- En Python tenemos las funciones del paquete scipy.stats.nbinom: pmf(k,n,p), cdf(k,n,p), ppf(q,n,p), rvs(n,p) donde nes el número de casos exitosos y p la probabilidad del éxito.
+```{r}
+
+#La Distribución Binomial Negativa es igual que la geometrica pero en vez hacerlo en base al primer exito, esta trabaja con un numero determinado de exitos.
+
+#Osea mide cual es la probabilidad de tener n exitos luego de un numero n de multiple ensayos
+
+#Imaginemos que queremos medir la probabilidad de que nos salga cara 5 veces si lanzamos una moneda 10 veces
+
+k = 5 #Numero de exitos que queremos medir la prob
+n = 10 #Numero de veces a lanzar la moneda
+p = 0.5 #Probabilidad de que salga cara
+
+prob_cara_nveces = dnbinom(n-k, k, p)
+prob_cara_nveces*100 #Aqui podemos ver que hay un 12.30% de que salga cara
+
+####
+
+#Ahora digamos que queremos medir cual es el numero de intentos de 0 a 25 que tiene mayor probabilidad de que nos salga cara JUSTAMENTE 7 veces.
+
+k = 7 #Numero de exitos que queremos medir la prob
+n = c(0:25) #Numero de veces a lanzar la moneda
+p = 0.5 #Probabilidad de que salga cara
+
+prob_cara_nveces = dnbinom(n-k, k, p)
+prob_cara_nveces*100 
+
+plot(n,prob_cara_nveces) #Aqui podemos ver que el numero de intentos de 0 a 25 que tiene mayor probabilidad de sacar JUSTAMENTE cara 7 veces es el 12 con un 10% de proababilidades y el 13 tambien con un 10% de prob tambien
+
+####
+
+#Ahora digamos que queremos medir cual es la proabilidad de que al menos nos salga cara 7 veces en el intento 25 o antes
+
+k = 7 #Numero de exitos que queremos medir la prob
+n = c(0:25) #Numero de veces a lanzar la moneda
+p = 0.5 #Probabilidad de que salga cara
+
+prob_cara_nveces_acum = pnbinom(n-k, k, p)
+prob_cara_nveces_acum*100 
+
+plot(n,prob_cara_nveces_acum) #Aqui podemos ver que del intento 1 al 6 hay un 0% de prob de al menos sacar 7 caras por obvias razones, tambien vemos que ya en el intento 20 tenemos hay un 80% de prob de al menos haber sacado 7 caras. Y ya en el intento 25 tenemos hay un 99% de prob de al menos haber sacado 7 caras
+
+####
+
+#Ahora digamos que queremos hacer este mismo experimento en 10000 ensayos para medir cual suele ser el numero de intentos con mayor probabilidad de que salgan 7 caras seguidas 
+
+k = 7 #Numero de exitos que queremos medir la prob
+p = 0.5 #Probabilidad de que salga cara
+
+cant_experimentos = 10000
+
+rn_prob_cara_nveces = rnbinom(cant_experimentos,k, p)
+
+hist(rn_prob_cara_nveces,breaks=25) #Aqui vemos como el numero de intentos con mayor probabilidad de que salgan 7 caras seguidas es de 4 a 7 intentos. Pero que tambien hubo casos todavia en intento numero 20, no habia obtenido 7 caras
+
+```
+

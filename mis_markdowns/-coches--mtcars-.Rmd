@@ -1,0 +1,34 @@
+---
+title: "Analisis de los coches (mtcars)"
+author: "Moises"
+date: "28/3/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Análisis de los coches (mtcars)
+
+### Carga de datos
+```{r}
+data <- nycflights13::flights #Cuando un dataset tiene muchas tablas haciendo esto puedes indicar cual tabla deseas tomar
+head(data)
+nrow(data)
+summary(data)
+```
+
+```{python}
+data = r.data #Tomando la data r a python
+
+```
+
+
+### Medidas de centralización
+```{python}
+print(data.mean()) # Media por columnas
+print(data.mean(axis = 1)) # Media por filas
+print(data.median())
+print(mtcars.mode())
+```

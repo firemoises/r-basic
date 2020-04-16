@@ -1,0 +1,313 @@
+---
+title: "Introducción a distribuciones de probabilidad - 2"
+author: "Moises"
+date: "22/3/2020"
+output: html_document
+---
+
+## Variable aleatoria continua
+
+Variable aleatoria continua. Una v.a. X:Ω⟶R
+es continua cuando su función de distribución FX:R⟶[0,1]
+
+es continua
+
+En este caso, FX(x)=FX(x−) y, por este motivo, p(X=x)=0 ∀x∈R pero esto no significa que sean sucesos imposibles
+
+## Función de densidad
+
+Función de densidad. Función f:R⟶R
+
+que satisface
+
+- f(x)≥0 ∀x∈R
+
+- ∫+∞−∞f(t)dt=1
+
+Una función de densidad puede tener puntos de discontinuidad
+
+
+## Variable aleatoria continua
+
+Toda variable aleatoria X con función de distribución
+
+F(x)=∫x−∞f(t)dt ∀x∈R para cualquier densidad f
+
+es una v.a. continua
+
+Diremos entonces que f es la función de densidad de X
+
+A partir de ahora, considerareos solamente las v.a. X continuas que tienen función de densidad
+
+## Distribución Uniforme
+
+Una v.a. continua X tiene distribución uniforme sobre el intervalo real [a,b] con a<b, X∼U(a,b) si su función de densidad es
+
+fX(x)={1b−a0si a≤x≤ben cualquier otro caso
+
+Modela el elegir un elemento del intervalo [a,b]
+
+- El dominio de X será DX=[a,b]
+
+- La función de distribución vendrá dada por FX(x)=⎧⎩⎨⎪⎪0x−ab−a1si x<asi a≤x<bsi x≥b
+
+- Esperanza E(X)=a+b2
+
+- Varianza Var(X)=(b−a)212
+
+
+## El código de la distribución Uniforme:
+
+- En R tenemos las funciones del paquete stats: dunif(x, min, max), punif(q, min, max), qunif(p, min, max), runif(n, min, max) donde min y max són los extremos de los intervalos de la distribución uniforme.
+- En Python tenemos las funciones del paquete scipy.stats.uniform: pdf(k,loc, scale), cdf(k,loc, scale), ppf(q,loc, scale), rvs(n,loc, scaler) donde la distribución uniforme está definida en el intervalo [loc, loc+scale].
+
+```{r}
+
+#La distribucion uniforme sirve para medir la probabilidad de eventos que de una forma uniforme y no variante
+
+#Por ejemplo imaginemos que hay un tren que su hora de llegada se distribuye de manera uniforme entre 10:00AM y 10:30AM, osea existe la misma probabilidad de que llegue en cualquiera de los intervalos entre 10:00AM y 10:30AM y entonces queremos medir entonces la probabilidad de que el tren llegue JUSTAMENTE a la 10:12AM
+
+a = 0 #El inicio del intervalo
+b = 30 #El final del intervalo
+prob_a_medir = 12
+
+prob_de_llegar = dunif(prob_a_medir, min = a, max = b)
+prob_de_llegar*100  #Aqui podemos ver que hay una probabilidad de 3.33% de que llegue JUSTAMENTE a las 10:12AM
+
+####
+
+#Ahora vamos a medir cual es la probabilidad de que llegue JUSTAMENTE entre 10:10AM a 10:22AM
+
+a = 0 #El inicio del intervalo
+b = 30 #El final del intervalo
+
+prob_a_medir1 = 10
+prob_a_medir2 = 22
+
+prob_de_llegar = dunif(prob_a_medir1, min = a, max = b) #Primero debemos hacer nuestra conversion normal pero SOLO con 1 de los intervalos(pudo haber sido cualquiera)
+
+prob_de_llegar = prob_de_llegar*(prob_a_medir2-prob_a_medir1) #Luegos simplemente lo multiplicamos por el intervalo de 10 hasta 22 osea 12
+
+prob_de_llegar*100  #Aqui podemos ver que hay una probabilidad de un 40% de que llegue JUSTAMENTE entre 10:10AM a 10:22AM.
+
+####
+
+#Ahora si quisieramos graficar la operacion anterior seria de la siguiente manera
+
+a = 0 #El inicio del intervalo
+b = 30 #El final del intervalo
+
+prob_a_medir1 = 10
+prob_a_medir2 = 22
+
+prob_de_llegar = dunif(prob_a_medir1:prob_a_medir2, min = a, max = b) 
+
+plot(prob_a_medir1:prob_a_medir2,prob_de_llegar,type = "l") #Aqui vemos como es igual de probable que llegue en cualquiera de los puntos de 10 al 12, por eso lo unico que debemos hacer es sumarlos todos
+
+####
+
+#Ahora si quisieramos medir la probabilidad de que llegue a las 10:07 o antes
+
+a = 0 #El inicio del intervalo
+b = 30 #El final del intervalo
+
+prob_a_medir = 7
+
+prob_de_llegar_acum = punif(prob_a_medir, min = a, max = b) 
+
+prob_de_llegar_acum*100 #Ahi un 23% de que llegue a las 10:07 o antes
+
+####
+
+#Ahora si quisieramos medir sus cuantiles
+
+a = 0 #El inicio del intervalo
+b = 30 #El final del intervalo
+
+qunif(0.5, a, b)
+qunif(0.75, a, b)
+
+####
+
+#Ahora si quisieramos hacer un experimento donde realicemos este experimento 10000 veces
+
+a = 0 #El inicio del intervalo
+b = 30 #El final del intervalo
+
+cant_experimentos = 10000
+
+runif(cant_experimentos, a, b) -> data
+
+hist(data,breaks=b-a) #Aqui vemos como practicamente es igual de probable de que el tren llegue en cualquiera de los intervalos entre 10:00AM a 10:30AM
+
+```
+
+
+## Distribución Exponencial
+
+Una v.a. X tiene distribución exponencial de parámetro λ, X∼Exp(λ), si su función de densidad es fX(x)={0λ⋅e−λxsi x≤0si x>0
+
+Teorema. Si tenemos un proceso de Poisson de parámetro λ
+por unidad de tiempo, el tiempo que pasa entre dos sucesos consecutivos es una v.a. 
+
+Exp(λ)
+
+Propiedad de la pérdida de memoria. Si X es v.a. Exp(λ), entonces
+p(X>s+t : X>s)=p(X>t) ∀s,t>0
+
+- El dominio de X será DX=[0,∞)
+
+- La función de distribución vendrá dada por FX(x)={01−e−λxsi x≤0si x>0
+
+- Esperanza E(X)=1λ
+
+- Varianza Var(X)=1λ2
+
+## El código de la distribución Exponencial:
+
+- En R tenemos las funciones del paquete stats: dexp(x, rate), pexp(q, rate), qexp(p, rate), rexp(n, rate) donde rate=λ es el tiempo entre dos sucesos consecutivos de la distribución.
+- En Python tenemos las funciones del paquete scipy.stats.expon: pdf(k, scale), cdf(k, scale), ppf(q, scale), rvs(n, scaler) donde scale=1/λ
+es la inversa del tiempo entre dos sucesos consecutivos de la distribución.
+
+```{r}
+
+#La distribucion exponencial mide la probabilidad de un evento que su comportamiento se distribuye de forma exponencial
+
+#Supongamos que el tiempo de servicio en un banco se modeliza por una variable aleatoria con distribución exponencial de razón de que atienden 10 clientes por cada 7 minutos.
+
+#Calcular la probabilidad de que un cliente sea servido JUSTAMENTE en 2 minutos
+
+prob_comport = 10/7 
+
+prob_a_medir = 2
+
+prob_exp = dexp(prob_a_medir,prob_comport)*100
+
+prob_exp #Hay una probabilidad de un 8% de que el cliente sea atentido JUSTAMENTE en 2 minutos
+
+####
+
+#Calcular la probabilidad de que un cliente sea atentido en 3 minutos o antes
+
+
+prob_comport = 10/7 
+
+prob_a_medir = 3 
+
+prob_exp_acum = pexp(prob_a_medir,prob_comport)*100
+
+prob_exp_acum #Hay una probabilidad de un 98.62% de que un cliente sea atentido en 3 minutos o antes
+
+####
+
+#Cual es la probabilidad de que un cliente tenga que esperar mas de 1 minuto
+
+prob_comport = 10/7 
+
+prob_a_medir = 1 # El tiempo a medir 
+
+prob_exp_acum = (1-pexp(prob_a_medir,prob_comport) )*100
+
+prob_exp_acum #Hay una probabilidad de un 24% de un cliente tenga que esperar mas de 1 minuto
+
+####
+
+#Digamos que queremos hacer este experimiento 10000 veces
+
+prob_comport = 10/7
+
+cant_experimentos = 10000
+
+random_values = rexp(cant_experimentos,prob_comport)
+
+hist(random_values,breaks = 7)
+
+#Aqui vemos como la gran mayoria de los clientes siempre seran atentidos antes de que pase 1 minuto
+
+```
+
+## Distribución Normal
+
+Una v.a. X tiene distribución normal o gaussiana de parámetros μ y σ, X∼N(μ,σ) si su función de densidad es fX(x)=12π−−√σe−(x−μ)22σ2∀x∈R
+
+La gráfica de fX es conocida como la Campana de Gauss
+
+Cuando μ=0 y σ=1, diremos que la v.a. X es estándar y la indicaremos usualmente como Z, la cual tendrá función de densidad fZ(z)=12π−−√e−z22∀z∈R
+
+- Esperanza E(X)=μ
+
+- Varianza Var(X)=σ2
+
+En particualr, si Z sigue una distribución estándar,
+
+- Esperanza E(X)=0
+
+- Varianza Var(X)=1
+
+
+## El código de la distribución Normal:
+
+- En R tenemos las funciones del paquete stats: dnorm(x, mean, sd), pnorm(q, mean, sd), qnorm(p, mean, sd), rnorm(n, mean, sd) donde mean es la media y sd es la desviación estándar de la normal N(μ,σ)
+
+- En Python tenemos las funciones del paquete scipy.stats.normal: pdf(k, mu, scale), cdf(k, mu, scale), ppf(q, mu, scale), rvs(n, mu, scale) donde mu es la media y scale es la desviación estándar de la normal N(μ,σ)
+
+```{r}
+
+#La distribucion normal mide la probabilidad de que una variable se comporte de forma "normal" osea la gran mayoria de sus resultados se encuentran en torno a la media y la minoria en los extremos
+
+#Imaginemos que en una ciudad, la altura de sus habitantes se suele distribuir de forma normal con una media de 5.7 pulgadas y una desviacion estandar de 0.4 
+
+#Calcula la probabilidad de que una persona mida 5.3 pulgadas
+
+mu = 5.7
+sd = 0.4
+prob_a_medir = 5.2
+
+prob_normal = dnorm(prob_a_medir, mu, sd)
+prob_normal*100 #Hay una probabilidad de un 45% de que una persona mida 5.3 pulgadas
+
+####
+
+#Cual es la probababilidad de que haya personas con mas de 6.5 pulgadas
+
+mu = 5.7
+sd = 0.4
+prob_a_medir = 6.5
+
+prob_normal_acum = 1 - pnorm(prob_a_medir, mu, sd)
+prob_normal_acum*100 #Hay una probabilidad de solo un 2.27% de que haya personas con mas de 6.5 pulgadas
+
+
+####
+
+#Calcula cual es la probabilidad de encontrarnos con personas de 5.0 a 6.6
+
+mu = 5.7
+sd = 0.4
+prob_a_medir1 = 5.0
+prob_a_medir2 = 6.6
+
+prob_normal_acum1 = pnorm(prob_a_medir1, mu, sd)
+
+prob_normal_acum2 = pnorm(prob_a_medir2, mu, sd)
+
+prob_normal_interval = prob_normal_acum2 - prob_normal_acum1
+
+prob_normal_interval #Aqui vemos que es un 94.77%
+
+####
+
+#Digamos que queremos repetir el experimento 10000 veces
+
+mu = 5.7
+sd = 0.4
+cant_experimentos = 10000
+
+
+random_values = rnorm(cant_experimentos, mu, sd)
+
+hist(random_values,breaks = 14) #Aqui vemos como la grafica tiene una estructura perfectamente normal
+
+
+```
+

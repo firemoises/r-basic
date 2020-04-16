@@ -1,0 +1,124 @@
+---
+title: "Datos cuantitativos agrupados 3 - Estadisticos"
+author: "Moises"
+date: "14/3/2020"
+output: html_document
+---
+
+## Estadísticos para datos agrupados
+
+Al tener una muestra de datos numéricos, conviene calcular los estadísticos antes de realizar los agrupamientos, puesto que de lo contrario podemos perder información.
+
+No obstante, hay situaciones en que los datos los obtenemos ya agrupados. En estos casos, aún sigue siendo posible calcular los estadísticos y utilizarlos como aproximaciones de los estadísticos de los datos "reales", los cuales no conocemos.
+
+La media x¯, la varianza, s2, la varianza muestral, s~2, la desviación típica, s, y la desviación típica muestral, s~ de un conjunto de datos agrupados se calculan mediante las mismas fórmulas que para los datos no agrupados con la única diferencia de que sustituimos cada clase por su marca de clase y la contamos con su frecuencia.
+
+En lo referente a la moda, esta se sustituye por el intervalo modal, que es la clase con mayor frecuencia (absoluta o relativa, tanto da).
+
+## Intervalo modal
+
+En el caso en que un valor numérico fuera necesario, se tomaría su marca de clase.
+
+## Intervalo crítico para la mediana
+
+Se conoce como intervalo crítico para la mediana, [Lc,Lc+1), al primer intervalo donde la frecuencia relativa acumulada sea mayor o igual que 0.5
+
+Denotemos por nc su frecuencia absoluta, por Ac=Lc+1−Lc su amplitud y por Nc−1 la frecuencia acumalada del intervalo inmediantamente anterior (en caso de ser [Lc,Lc+1)=[L1,L2), entonces Nc−1=0). Entonces, M será una aproximación para la mediana de los datos "reales" a partir de los agrupados
+
+## Aproximación de los cuantiles
+
+La fórmula anterior nos permite aproximar el cuantil Qp de los datos "reales" a partir de los datos agrupados:
+
+Qp=Lp+Ap⋅p⋅n−Np−1np
+
+donde el intervalo [Lp,Lp+1) denota el primer intervalo cuya frecuencia relativa acumulada es mayor o igual a p
+
+## Ejercicio: calcular estadísticos de datos agrupados
+
+Vamos a seguir trabajando con nuestra variable cw y, esta vez, lo que haremos será calcular los estadísticos de la variable con los datos agrupados y, para acabar, estimaremos la mediana y algunos cuantiles.
+
+Recordemos todo lo que habíamos obtenido sobre nuestra variable cw:
+```{r}
+
+TablaFrecs = function(x,k,A,p){ 
+  L = min(x)-p/2+A*(0:k)
+  x_cut = cut(x, breaks = L, right=FALSE)
+  intervals = levels(x_cut) #El vector convertido en factor por intervalos
+  mc = (L[1]+L[2])/2+A*(0:(k-1)) #El punto medio
+  Fr.abs = as.vector(table(x_cut)) # La frecuencia absoluta
+  Fr.rel = round(Fr.abs/length(x),4)  # La frecuencia relativa
+  Fr.cum.abs = cumsum(Fr.abs) # La frecuencia absoluta acumulada
+  Fr.cum.rel = cumsum(Fr.rel) # La frecuencia relativa acumulada
+  tabla = data.frame(intervals, mc, Fr.abs, Fr.cum.abs, Fr.rel, Fr.cum.rel)
+  tabla
+}
+
+crabs = read.table("../data/datacrab.txt", header = TRUE)
+str(crabs)
+
+cw = crabs$width
+
+longintud = 10
+amplitud = 1.3
+presicion = 0.1
+
+tabla_crabs = TablaFrecs(cw,longintud,amplitud,presicion)
+
+L = min(cw)-presicion/2+amplitud*(0:longintud)
+
+```
+
+Ahora ya podemos calcular los estadísticos:
+```{r}
+
+TOT = tabla_crabs$Fr.cum.abs[longintud] #Frecuencia acumulada en la posicion 10
+TOT #O tambien total de individuos
+
+anchura.media = round(sum(tabla_crabs$Fr.abs*tabla_crabs$mc)/TOT,3)
+anchura.media #Media
+
+anchura.var = round(sum(tabla_crabs$Fr.abs*tabla_crabs$mc^2)/TOT-anchura.media^2,3)
+anchura.var #Varianza
+
+anchura.dt = round(sqrt(anchura.var),3)
+anchura.dt #Desviación típica
+
+I.modal = tabla_crabs$intervals[which(tabla_crabs$Fr.abs == max(tabla_crabs$Fr.abs))]
+I.modal #Intervalo modal
+
+#Por lo tanto, con los datos de los que disponemos, podemos afirmar que la anchura media de los cangrejos de la muestra es de 26.312mm, con una desviación típica de unos 4.476mm, y que el grupo de anchuras más numeroso era el de [24.85,26.15).
+
+#Pasemos ahora a calcular el intervalo crítico para la mediana.
+
+I.critic = tabla_crabs$intervals[which(tabla_crabs$Fr.cum.rel >= 0.5)] #Usamos Which porque devuelve todos los elementos que cumplen la condicion, en este caso los elementos que tengan frecuencia acumulada relativa mayor a 0.5
+I.critic[1] #Y aqui elegimos el primer elemento que tenga frecuencia acumulada relativa mayor a 0.5
+
+I.critic_index = match(I.critic[1],tabla_crabs$intervals) #Ahora necesitamos el indice del intervalo I.critic[1] del vector tabla_crabs$intervals y lo haremos con la funcion match, en este caso la mediana esta en la posicion 4 de ese vector
+
+n = TOT #Total de intervalos
+Lc = L[I.critic_index] #Ahora buscamos el limite inferior del intervalo critico de la mediana
+Lc.pos = L[I.critic_index+1] #Ahora buscamos el limite superior del intervalo critico de la mediana
+Ac = Lc.pos-Lc # la amplitud del intervalo de la mediana
+Nc.ant = L[I.critic_index-1] #el limite inferior del intervalo ANTERIOR al intervalo critico de la mediana
+nc = L[I.critic_index] #el limite superior del intervalo ANTERIOR al intervalo critico de la mediana
+M = Lc+Ac*((n/2)-Nc.ant)/nc #Aproximación de la mediana de los datos agrupados
+M 
+
+median(cw) #Mediana de los datos "reales"
+```
+
+También podemos hacer aproximaciones de los cuantiles. Hemos creado una función aprox.quantile.p para no tener que copiar la operación cada vez que queramos calcular un cuantil aproximado.
+```{r}
+aprox.quantile.p = function(Lcrit,Acrit,n,p,Ncrit.ant,ncrit){
+  round(Lcrit+Acrit*(p*n-Ncrit.ant)/ncrit,3)
+}
+aprox.quantile.p(Lc,Ac,n,0.25,Nc.ant,nc) #Primer cuartil
+
+aprox.quantile.p(Lc,Ac,n,0.75,Nc.ant,nc) #Tercer cuartil
+
+#Y ahora, calculemos los cuartiles de los datos "reales"
+quantile(cw,0.25)
+quantile(cw,0.75)
+```
+
+
